@@ -3,7 +3,7 @@ package edu.illinois.scoobygang.emergencyalerts.data;
 import java.util.ArrayList;
 import java.util.List;
 
-class Contact {
+public class Contact {
     private List<ContactPlatform> contactPlatformList;
     private ContactPlatform defaultPlatform;
 
