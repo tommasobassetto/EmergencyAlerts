@@ -34,6 +34,31 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
+    <LinearLayout
+        android:id="@+id/SelectContactContinueMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="bottom"
+        >
+        <Button
+            android:id="@+id/SelectContactBackButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/back_string"
+            android:textAllCaps="false"
+            android:backgroundTint="#FFD00000"/>
+        <Button
+            android:id="@+id/SelectContactNextButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/continue_string"
+            android:textAllCaps="false"
+            android:backgroundTint="#FF00A000"/>
+    </LinearLayout>
+
     <include layout="@layout/content_scrolling" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
