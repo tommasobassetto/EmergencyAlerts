@@ -1,6 +1,9 @@
 package edu.illinois.scoobygang.emergencyalerts;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -19,6 +22,13 @@ import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+    private final View.OnClickListener sendAlertClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent i = new Intent(MainActivity.this, ContactSelectActivity.class);
+            startActivity(i);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +48,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(binding.navView, navController);
 
         // read contacts, templates
+
+        Button sendAlertActivity = (Button) findViewById(R.id.send_alert_button);
+        sendAlertActivity.setOnClickListener(this.sendAlertClicked);
     }
 
 }
