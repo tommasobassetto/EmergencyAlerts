@@ -6,20 +6,21 @@
     app:startDestination="@+id/navigation_home">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="edu.illinois.scoobygang.emergencyalerts.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/navigation_messages"
+        android:name="edu.illinois.scoobygang.emergencyalerts.ui.notifications.NotificationsFragment"
+        android:label="@string/title_messages"
+        tools:layout="@layout/fragment_notifications" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_home"
         android:name="edu.illinois.scoobygang.emergencyalerts.ui.dashboard.DashboardFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/title_home"
         tools:layout="@layout/fragment_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="edu.illinois.scoobygang.emergencyalerts.ui.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_contacts"
+        android:name="edu.illinois.scoobygang.emergencyalerts.ui.home.HomeFragment"
+        android:label="@string/title_contacts"
+        tools:layout="@layout/fragment_home" />
+
 </navigation>
