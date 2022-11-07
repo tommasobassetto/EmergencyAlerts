@@ -14,6 +14,15 @@
         android:theme="@style/Theme.EmergencyAlerts"
         tools:targetApi="31">
         <activity
+            android:name=".MessageSelectActivity"
+            android:exported="false"
+            android:label="@string/title_activity_message_select"
+            android:theme="@style/Theme.EmergencyAlerts.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".ContactSelectActivity"
             android:exported="false"
             android:label="@string/title_activity_contact_select"

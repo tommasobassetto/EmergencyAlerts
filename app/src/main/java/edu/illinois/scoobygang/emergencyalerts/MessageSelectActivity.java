@@ -13,18 +13,17 @@ import androidx.appcompat.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 
-import edu.illinois.scoobygang.emergencyalerts.data.Contact;
-import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityContactSelectBinding;
+import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMessageSelectBinding;
 
-public class ContactSelectActivity extends AppCompatActivity {
+public class MessageSelectActivity extends AppCompatActivity {
 
-    private ActivityContactSelectBinding binding;
+    private ActivityMessageSelectBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityContactSelectBinding.inflate(getLayoutInflater());
+        binding = ActivityMessageSelectBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         Toolbar toolbar = binding.toolbar;
@@ -40,23 +39,24 @@ public class ContactSelectActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
-
-        Button backButton = binding.SelectContactBackButton;
+        Button backButton = binding.SelectMessageBackButton;
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ContactSelectActivity.this, MainActivity.class);
+                Intent i = new Intent(MessageSelectActivity.this, ContactSelectActivity.class);
                 startActivity(i);
             }
         });
 
-        Button forwardButton = binding.SelectContactNextButton;
+        Button forwardButton = binding.SelectMessageNextButton;
         forwardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(ContactSelectActivity.this, MessageSelectActivity.class);
+                // FIXME - should pop from stack
+                Intent i = new Intent(MessageSelectActivity.this, MainActivity.class);
                 startActivity(i);
             }
         });
+
     }
 }
