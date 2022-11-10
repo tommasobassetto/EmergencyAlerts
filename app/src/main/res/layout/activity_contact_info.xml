@@ -6,52 +6,98 @@
     android:layout_height="match_parent"
     tools:context=".ContactInfoActivity">
 
-  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  <LinearLayout
+      android:orientation="vertical"
       android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:layout_margin="40dp">
+      android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/firstName"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:hint="First name"
-        android:inputType="textPersonName" />
+        android:orientation="horizontal">
 
-    <EditText
-        android:id="@+id/lastName"
-        android:layout_width="wrap_content"
+      <Button
+          android:id="@+id/back"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/back_string"
+          android:layout_weight="1"
+          android:layout_gravity="end"/>
+
+      <Space
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_weight="3"/>
+
+      <Button
+          android:id="@+id/save"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="@string/save_string"
+          android:layout_weight="1"
+          android:layout_gravity="start"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/firstName"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Last name"
-        android:inputType="textPersonName" />
+        android:text="@string/contact_info"
+        android:textSize="24dp"
+        android:gravity="center"
+        android:layout_margin="40dp"/>
 
-    <EditText
-        android:id="@+id/phone"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/lastName"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Phone"
-        android:inputType="text|phone" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
 
-    <EditText
-        android:id="@+id/email"
-        android:layout_width="wrap_content"
+      <EditText
+          android:id="@+id/firstName"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="textPersonName"
+          android:hint="First name"/>
+
+      <EditText
+          android:id="@+id/lastName"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="textPersonName"
+          android:hint="Last name"/>
+
+      <EditText
+          android:id="@+id/phone"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="text|phone"
+          android:hint="Phone number"/>
+
+      <EditText
+          android:id="@+id/email"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:inputType="textEmailAddress"
+          android:hint="Email address"/>
+
+    </LinearLayout>
+
+    <Space
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/phone"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:hint="Email"
-        android:inputType="textEmailAddress" />
+        android:layout_weight="1"/>
 
-  </RelativeLayout>
+    <Button
+        android:id="@+id/delete"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/delete_string"
+        android:gravity="center"/>
+
+  </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

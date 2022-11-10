@@ -2,71 +2,111 @@ package edu.illinois.scoobygang.emergencyalerts;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Context;
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-
-import edu.illinois.scoobygang.emergencyalerts.data.Contact;
+import java.util.Objects;
 
 public class ContactInfoActivity extends AppCompatActivity {
 
-    private static final String FILENAME = "contacts.csv";
+    String contactID, firstName, lastName, phone, email;
+    EditText firstNameView, lastNameView, phoneView, emailView;
+    Button save, back, delete;
 
-    EditText firstNameView;
-    EditText lastNameView;
-    EditText phoneView;
-    EditText emailView;
+    private String[] removeWhitespace(String s) {
+        String[] data = new String[2];
+        String v = s.replace(" ", "");
+        v = v.replace("\t", "");
+        v = v.replace("\n", "");
+        data[0] = s;
+        data[1] = v;
+        return data;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_info);
 
-        firstNameView = (EditText) findViewById(R.id.firstName);
-        lastNameView = (EditText) findViewById(R.id.lastName);
-        phoneView = (EditText) findViewById(R.id.phone);
-        emailView = (EditText) findViewById(R.id.email);
+        firstNameView = findViewById(R.id.firstName);
+        lastNameView = findViewById(R.id.lastName);
+        phoneView = findViewById(R.id.phone);
+        emailView = findViewById(R.id.email);
 
-        // read contact info from file
-        Contact contact = new Contact();
+        contactID = getIntent().getStringExtra("CONTACT_ID");
 
+        save = findViewById(R.id.save);
+        back = findViewById(R.id.back);
+        delete = findViewById(R.id.delete);
 
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // open editor to contact's preferences file
+                SharedPreferences contact = getSharedPreferences(contactID, MODE_PRIVATE);
+                SharedPreferences.Editor editor = contact.edit();
+
+                // read data from text views
+                String[] firstName = removeWhitespace(firstNameView.getText().toString());
+                String[] lastName = removeWhitespace(lastNameView.getText().toString());
+                String[] phone = removeWhitespace(phoneView.getText().toString());
+                String[] email = removeWhitespace(emailView.getText().toString());
+
+                // save contact info
+                if (firstName[1].equals("")) {
+                    editor.putString("firstName", firstName[1]);
+                } else {
+                    editor.putString("firstName", firstName[0]);
+                } if (lastName[1].equals("")) {
+                    editor.putString("firstName", lastName[1]);
+                } else {
+                    editor.putString("firstName", lastName[0]);
+                } if (phone[1].equals("")) {
+                    editor.putString("firstName", phone[1]);
+                } else {
+                    editor.putString("firstName", phone[0]);
+                } if (email[1].equals("")) {
+                    editor.putString("firstName", email[1]);
+                } else {
+                    editor.putString("firstName", email[0]);
+                }
+                editor.apply();
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SharedPreferences contact = getSharedPreferences(contactID, MODE_PRIVATE);
+                contact.edit().clear().apply();
+            }
+        });
     }
 
-    public void saveToFile(View v) throws IOException {
-        String firstNameText = firstNameView.getText().toString() + ",";
-        String lastNameText = lastNameView.getText().toString() + ",";
-        String phoneText = phoneView.getText().toString() + ",";
-        String emailText = emailView.getText().toString() + ",";
+    @Override
+    protected void onResume() {
+        super.onResume();
 
-        FileOutputStream out = null;
-        try {
-            out = openFileOutput(FILENAME, MODE_PRIVATE);
-            out.write(firstNameText.getBytes());
-            out.write(lastNameText.getBytes());
-            out.write(phoneText.getBytes());
-            out.write(emailText.getBytes());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (out != null) {
-                    out.close();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        // retrieve contact info
+        SharedPreferences contact = getSharedPreferences(contactID, MODE_PRIVATE);
+        firstName = contact.getString("firstName", "");
+        lastName = contact.getString("lastName", "");
+        phone = contact.getString("phone", "");
+        email = contact.getString("email", "");
+
+        // populate text fields
+        if (!Objects.equals(firstName, "")) {
+            firstNameView.setText(firstName);
+        } if (!Objects.equals(lastName, "")) {
+            lastNameView.setText(lastName);
+        } if (!Objects.equals(phone, "")) {
+            phoneView.setText(phone);
+        } if (!Objects.equals(email, "")) {
+            emailView.setText(email);
         }
     }
 
