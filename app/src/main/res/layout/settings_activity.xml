@@ -1,0 +1,49 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/import_contacts"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="?attr/actionBarSize">
+
+        <FrameLayout
+            android:id="@+id/settings"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteY="675dp">
+        </FrameLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>
+<!--<PreferenceScreen-->
+<!--    xmlns:app="http://schemas.android.com/apk/res-auto">-->
+
+<!--    <PreferenceCategory-->
+<!--        app:key="notifications_category"-->
+<!--        app:title="Notifications">-->
+
+<!--        <SwitchPreferenceCompat-->
+<!--            app:key="notifications"-->
+<!--            app:title="Enable message notifications"/>-->
+
+<!--    </PreferenceCategory>-->
+
+<!--    <PreferenceCategory-->
+<!--        app:key="help_category"-->
+<!--        app:title="Help">-->
+
+<!--        <Preference-->
+<!--            app:key="feedback"-->
+<!--            app:summary="Report technical issues or suggest new features"-->
+<!--            app:title="Send feedback"/>-->
+
+<!--    </PreferenceCategory>-->
+
+<!--</PreferenceScreen>-->

@@ -22,10 +22,19 @@ import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMainBinding;
 public class MainActivity extends AppCompatActivity {
 
     private ActivityMainBinding binding;
+
     private final View.OnClickListener sendAlertClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
             Intent i = new Intent(MainActivity.this, ContactSelectActivity.class);
+            startActivity(i);
+        }
+    };
+
+    private final View.OnClickListener settingsClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
             startActivity(i);
         }
     };
@@ -51,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
 
         Button sendAlertActivity = (Button) findViewById(R.id.send_alert_button);
         sendAlertActivity.setOnClickListener(this.sendAlertClicked);
+
+        Button settingsActivity = (Button) findViewById(R.id.settings_button);
+        settingsActivity.setOnClickListener(this.settingsClicked);
     }
 
 }
