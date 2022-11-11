@@ -1,6 +1,6 @@
 package edu.illinois.scoobygang.emergencyalerts.data;
 
-class Message {
+public class Message {
     public String title;
-    public String message;
+    public String body;
 }
