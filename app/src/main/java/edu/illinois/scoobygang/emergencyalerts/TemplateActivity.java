@@ -4,28 +4,58 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.illinois.scoobygang.emergencyalerts.data.Message;
+import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageAdapter;
 
 public class TemplateActivity extends AppCompatActivity {
 
-//    private ActivityTemplateBinding binding;
-    private List<Message> messages;
+    MessageAdapter adapter;
+    RecyclerView recyclerView;
+//    ClickListener listener;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-
-//        binding = ActivityTemplateBinding.inflate(getLayoutInflater());
-//        setContentView(binding.getRoot());
         setContentView(R.layout.fragment_message);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.message_toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
 
-        RecyclerView messageRV = findViewById(R.id.message_recycler);
+        List<Message> list = new ArrayList<>();
+        list = getData();
 
-
+        recyclerView = (RecyclerView) findViewById(R.id.message_recycler);
+//        listener = new ClickListener() {
+//            @Override
+//            public void click(int index){
+//                Toast.makeTexT(this,"clicked item index is "+index,Toast.LENGTH_LONG).show();
+//            }
+//        };
+        adapter = new MessageAdapter(list);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(TemplateActivity.this));
     }
 
+//    @Override
+//    public void onBackPressed()
+//    {
+//        super.onBackPressed();
+//    }
+
+    // Sample data for RecyclerView
+    private List<Message> getData()
+    {
+        List<Message> list = new ArrayList<>();
+        list.add(new Message("I HATE ANDROID", "I HATE ANDROID"));
+        list.add(new Message("REALLY I DO", "REALLY I DO"));
+
+        return list;
+    }
 }
