@@ -17,13 +17,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder>{
     List<Message> list = Collections.emptyList();
 
 //    Context context;
-//    ClickListener listener;
+    ClickListener listener;
 
-    public MessageAdapter(List<Message> list)
+    public MessageAdapter(List<Message> list, ClickListener listener)
     {
         this.list = list;
 //        this.context = context;
-//        this.listener = listener;
+        this.listener = listener;
     }
 
     @Override
@@ -32,24 +32,24 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder>{
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        View photoView = inflater.inflate(R.layout.item_message, parent, false);
+        View itemView = inflater.inflate(R.layout.item_message, parent, false);
 
-        MessageViewHolder viewHolder = new MessageViewHolder(photoView);
+        MessageViewHolder viewHolder = new MessageViewHolder(itemView);
         return viewHolder;
     }
 
     @Override
     public void
     onBindViewHolder(final MessageViewHolder viewHolder, final int position) {
-//        final index = viewHolder.getAdapterPosition();
+        final int index = viewHolder.getAdapterPosition();
         viewHolder.title.setText(list.get(position).title);
-//        viewHolder.view.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view)
-//            {
-//                listener.click(index);
-//            }
-//        });
+        viewHolder.view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view)
+            {
+                listener.click(index);
+            }
+        });
     }
 
     @Override

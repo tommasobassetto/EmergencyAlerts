@@ -11,13 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.illinois.scoobygang.emergencyalerts.data.Message;
+import edu.illinois.scoobygang.emergencyalerts.ui.notifications.ClickListener;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageAdapter;
 
 public class TemplateActivity extends AppCompatActivity {
 
     MessageAdapter adapter;
     RecyclerView recyclerView;
-//    ClickListener listener;
+    ClickListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -38,7 +39,7 @@ public class TemplateActivity extends AppCompatActivity {
 //                Toast.makeTexT(this,"clicked item index is "+index,Toast.LENGTH_LONG).show();
 //            }
 //        };
-        adapter = new MessageAdapter(list);
+        adapter = new MessageAdapter(list, listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(TemplateActivity.this));
     }

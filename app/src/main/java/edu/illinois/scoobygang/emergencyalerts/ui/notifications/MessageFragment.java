@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -25,7 +26,7 @@ public class MessageFragment extends Fragment {
     private MessageAdapter adapter;
     private RecyclerView recyclerView;
     private FragmentMessageBinding binding;
-//    ClickListener listener;
+    private ClickListener listener;
 
 //    @Override
 //    public void onBackPressed()
@@ -43,11 +44,17 @@ public class MessageFragment extends Fragment {
         List<Message> list = new ArrayList<>();
         list = getData();
 
+        listener = new ClickListener() {
+            @Override
+            public void click(int index){
+                Toast.makeText(root.getContext(),"clicked item index is "+index,Toast.LENGTH_LONG).show();
+            }
+        };
+
         recyclerView = root.findViewById(R.id.message_recycler);
-        adapter = new MessageAdapter(list);
+        adapter = new MessageAdapter(list, listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-
 
 //        Toolbar toolbar = binding.messageToolbar;
 //        toolbar.setTitle("");
