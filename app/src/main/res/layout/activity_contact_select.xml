@@ -6,34 +6,51 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".ContactSelectActivity">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
-        android:fitsSystemWindows="true"
-        android:theme="@style/Theme.EmergencyAlerts.AppBarOverlay">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:gravity="center"
+        android:text="Select contacts"
+        android:background="#6619FF"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="5dp"/>
+
+    <LinearLayout
+        android:id="@+id/SelectContactBulkMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <Button
+            android:id="@+id/SelectNoneButton"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="Deselect All"
+            android:textAllCaps="false"
+            android:layout_margin="5dp"
+            />
+        <Button
+            android:id="@+id/SelectAllButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Select All"
+            android:textAllCaps="false"
+            android:layout_margin="5dp"
+            />
+    </LinearLayout>
+        <!--INSERT SCROLLING CONTENT HERE-->
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/Theme.EmergencyAlerts.PopupOverlay" />
-
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
-
+            android:layout_height="fill_parent">
     <LinearLayout
         android:id="@+id/SelectContactContinueMenu"
         android:layout_width="match_parent"
@@ -58,16 +75,7 @@
             android:textAllCaps="false"
             android:backgroundTint="#FF00A000"/>
     </LinearLayout>
-
-    <include layout="@layout/content_scrolling" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
+        </LinearLayout>
+    </LinearLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

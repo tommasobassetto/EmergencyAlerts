@@ -7,9 +7,9 @@
 
     <fragment
         android:id="@+id/navigation_messages"
-        android:name="edu.illinois.scoobygang.emergencyalerts.ui.notifications.NotificationsFragment"
+        android:name="edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageFragment"
         android:label="@string/title_messages"
-        tools:layout="@layout/fragment_notifications" />
+        tools:layout="@layout/fragment_message" />
 
     <fragment
         android:id="@+id/navigation_home"

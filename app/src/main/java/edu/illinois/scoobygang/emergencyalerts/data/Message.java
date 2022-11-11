@@ -1,6 +1,11 @@
 package edu.illinois.scoobygang.emergencyalerts.data;
 
-class Message {
+public class Message {
     public String title;
-    public String message;
+    public String body;
+
+    public Message(String title, String body) {
+        this.title = title;
+        this.body = body;
+    }
 }

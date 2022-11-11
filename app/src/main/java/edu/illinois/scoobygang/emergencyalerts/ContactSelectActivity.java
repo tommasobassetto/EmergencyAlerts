@@ -12,6 +12,8 @@ import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import edu.illinois.scoobygang.emergencyalerts.data.Contact;
 import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityContactSelectBinding;
@@ -19,6 +21,7 @@ import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityContactSelect
 public class ContactSelectActivity extends AppCompatActivity {
 
     private ActivityContactSelectBinding binding;
+    private LinearLayout contactList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,20 +29,6 @@ public class ContactSelectActivity extends AppCompatActivity {
 
         binding = ActivityContactSelectBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        Toolbar toolbar = binding.toolbar;
-        setSupportActionBar(toolbar);
-        CollapsingToolbarLayout toolBarLayout = binding.toolbarLayout;
-        toolBarLayout.setTitle(getTitle());
-
-        FloatingActionButton fab = binding.fab;
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         Button backButton = binding.SelectContactBackButton;
         backButton.setOnClickListener(new View.OnClickListener() {
