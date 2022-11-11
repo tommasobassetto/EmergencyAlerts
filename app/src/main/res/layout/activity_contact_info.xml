@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -56,23 +55,18 @@
         android:layout_gravity="center_horizontal">
 
       <EditText
-          android:id="@+id/firstName"
+          android:id="@+id/name"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_margin="10dp"
           android:inputType="textPersonName"
-          android:hint="First name"/>
-
-      <EditText
-          android:id="@+id/lastName"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:inputType="textPersonName"
-          android:hint="Last name"/>
+          android:hint="Name"/>
 
       <EditText
           android:id="@+id/phone"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_margin="10dp"
           android:inputType="text|phone"
           android:hint="Phone number"/>
 
@@ -80,6 +74,7 @@
           android:id="@+id/email"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
+          android:layout_margin="10dp"
           android:inputType="textEmailAddress"
           android:hint="Email address"/>
 
