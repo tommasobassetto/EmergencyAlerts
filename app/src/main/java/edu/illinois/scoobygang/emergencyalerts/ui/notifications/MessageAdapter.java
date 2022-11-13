@@ -42,7 +42,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder>{
     public void
     onBindViewHolder(final MessageViewHolder viewHolder, final int position) {
         final int index = viewHolder.getAdapterPosition();
-        viewHolder.title.setText(list.get(position).title);
+        viewHolder.title.setText(list.get(position).getTitle());
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
