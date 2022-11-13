@@ -6,34 +6,54 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     tools:context=".MessageSelectActivity">
-
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/app_bar"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/app_bar_height"
-        android:fitsSystemWindows="true"
-        android:theme="@style/Theme.EmergencyAlerts.AppBarOverlay">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/toolbar_layout"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40sp"
+        android:gravity="center"
+        android:text="Enter your message"
+        android:background="#6619FF"
+        android:textColor="#FFFFFF"
+        android:layout_marginBottom="5dp"/>
+        <EditText
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Type a message..." />
+
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/message_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize">
+        <SearchView
+            android:id="@+id/message_searchbar"
+            android:layout_width="fill_parent"
             android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
+            android:iconifiedByDefault="false"
+            android:layout_marginEnd="50dp"/>
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/Theme.EmergencyAlerts.PopupOverlay" />
+    </androidx.appcompat.widget.Toolbar>
 
-        </com.google.android.material.appbar.CollapsingToolbarLayout>
-    </com.google.android.material.appbar.AppBarLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginTop="5dp">
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/message_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </FrameLayout>
+</LinearLayout>
     <LinearLayout
         android:id="@+id/SelectMessageContinueMenu"
         android:layout_width="match_parent"
@@ -60,14 +80,5 @@
     </LinearLayout>
 
     <include layout="@layout/content_scrolling" />
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="@dimen/fab_margin"
-        app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_dialog_email" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
