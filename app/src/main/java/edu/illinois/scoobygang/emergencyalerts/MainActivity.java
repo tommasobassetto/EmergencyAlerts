@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -21,8 +22,6 @@ import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ActivityMainBinding binding;
-
     private final View.OnClickListener sendAlertClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -31,22 +30,15 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    private final View.OnClickListener settingsClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent i = new Intent(MainActivity.this, SettingsActivity.class);
-            startActivity(i);
-        }
-    };
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMainBinding binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
@@ -56,13 +48,9 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        // read contacts, templates
-
-        Button sendAlertActivity = (Button) findViewById(R.id.send_alert_button);
+        // attach listeners to buttons
+        Button sendAlertActivity = findViewById(R.id.send_alert_button);
         sendAlertActivity.setOnClickListener(this.sendAlertClicked);
-
-        Button settingsActivity = (Button) findViewById(R.id.settings_button);
-        settingsActivity.setOnClickListener(this.settingsClicked);
     }
 
 }

@@ -13,8 +13,8 @@ import java.util.Objects;
 
 public class ContactInfoActivity extends AppCompatActivity {
 
-    String contactID, firstName, lastName, phone, email;
-    EditText firstNameView, lastNameView, phoneView, emailView;
+    String contactID, name, phone, email;
+    EditText nameView, phoneView, emailView;
     Button save, back, delete;
 
     private String[] removeWhitespace(String s) {
@@ -32,8 +32,7 @@ public class ContactInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contact_info);
 
-        firstNameView = findViewById(R.id.firstName);
-        lastNameView = findViewById(R.id.lastName);
+        nameView = findViewById(R.id.name);
         phoneView = findViewById(R.id.phone);
         emailView = findViewById(R.id.email);
 
@@ -51,28 +50,23 @@ public class ContactInfoActivity extends AppCompatActivity {
                 SharedPreferences.Editor editor = contact.edit();
 
                 // read data from text views
-                String[] firstName = removeWhitespace(firstNameView.getText().toString());
-                String[] lastName = removeWhitespace(lastNameView.getText().toString());
+                String[] name = removeWhitespace(nameView.getText().toString());
                 String[] phone = removeWhitespace(phoneView.getText().toString());
                 String[] email = removeWhitespace(emailView.getText().toString());
 
                 // save contact info
-                if (firstName[1].equals("")) {
-                    editor.putString("firstName", firstName[1]);
+                if (name[1].equals("")) {
+                    editor.putString("name", name[1]);
                 } else {
-                    editor.putString("firstName", firstName[0]);
-                } if (lastName[1].equals("")) {
-                    editor.putString("firstName", lastName[1]);
-                } else {
-                    editor.putString("firstName", lastName[0]);
+                    editor.putString("name", name[0]);
                 } if (phone[1].equals("")) {
-                    editor.putString("firstName", phone[1]);
+                    editor.putString("phone", phone[1]);
                 } else {
-                    editor.putString("firstName", phone[0]);
+                    editor.putString("phone", phone[0]);
                 } if (email[1].equals("")) {
-                    editor.putString("firstName", email[1]);
+                    editor.putString("email", email[1]);
                 } else {
-                    editor.putString("firstName", email[0]);
+                    editor.putString("email", email[0]);
                 }
                 editor.apply();
             }
@@ -81,8 +75,8 @@ public class ContactInfoActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SharedPreferences contact = getSharedPreferences(contactID, MODE_PRIVATE);
-                contact.edit().clear().apply();
+                SharedPreferences contactPrefs = getSharedPreferences(contactID, MODE_PRIVATE);
+                contactPrefs.edit().clear().apply();
             }
         });
     }
@@ -93,16 +87,13 @@ public class ContactInfoActivity extends AppCompatActivity {
 
         // retrieve contact info
         SharedPreferences contact = getSharedPreferences(contactID, MODE_PRIVATE);
-        firstName = contact.getString("firstName", "");
-        lastName = contact.getString("lastName", "");
+        name = contact.getString("name", "");
         phone = contact.getString("phone", "");
         email = contact.getString("email", "");
 
         // populate text fields
-        if (!Objects.equals(firstName, "")) {
-            firstNameView.setText(firstName);
-        } if (!Objects.equals(lastName, "")) {
-            lastNameView.setText(lastName);
+        if (!Objects.equals(name, "")) {
+            nameView.setText(name);
         } if (!Objects.equals(phone, "")) {
             phoneView.setText(phone);
         } if (!Objects.equals(email, "")) {
