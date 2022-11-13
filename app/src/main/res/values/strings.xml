@@ -103,13 +103,12 @@
     <string name="delete_string">Delete</string>
     <string name="add_contact_string">Add Contact</string>
     <string name="search_bar_text">Search Message</string>
-<<<<<<< HEAD
+
     <string name="message_title">Title</string>
     <string name="message_body">Message</string>
     <string name="plus_sign">+</string>
     <string name="message_page_title">Message Templates</string>
 
-=======
     <string name="title_activity_settings">SettingsActivity</string>
 
     <!-- Preference Titles -->
@@ -127,5 +126,5 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="settings">Settings</string>
->>>>>>> 050eb0f18068180cd1b6760612eb27ae950723b7
+
 </resources>
