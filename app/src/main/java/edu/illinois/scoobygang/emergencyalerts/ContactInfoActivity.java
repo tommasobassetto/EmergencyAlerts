@@ -6,11 +6,13 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.Objects;
 
 public class ContactInfoActivity extends AppCompatActivity {
@@ -27,6 +29,19 @@ public class ContactInfoActivity extends AppCompatActivity {
         data[0] = s;
         data[1] = v;
         return data;
+    }
+
+    private void deleteSharedPrefsFile(String contactID) {
+        String path = getApplicationInfo().dataDir + "/shared_prefs/";
+        String filename = contactID + ".xml";
+        String fullname = path + filename;
+        Log.d("fullname", fullname);
+        File prefsFile = new File(fullname);
+        if (prefsFile.delete()) {
+            Log.d("status", "successful!");
+        } else {
+            Log.d("status", "not successful");
+        }
     }
 
     private final View.OnClickListener saveClicked = new View.OnClickListener() {
@@ -57,18 +72,19 @@ public class ContactInfoActivity extends AppCompatActivity {
             }
             editor.apply();
 
-            Toast.makeText(getApplicationContext(),"Added contact",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Save successful!",Toast.LENGTH_SHORT).show();
         }
     };
 
     private final View.OnClickListener deleteClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            SharedPreferences contactPrefs = getSharedPreferences(contactID, MODE_PRIVATE);
-            contactPrefs.edit().clear().apply();
+//            SharedPreferences contactPrefs = getSharedPreferences(contactID, MODE_PRIVATE);
+//            contactPrefs.edit().clear().apply();
+            deleteSharedPrefsFile(contactID);
 
             Toast.makeText(getApplicationContext(),"Deleted contact",Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(ContactInfoActivity.this, ContactAllActivity.class);
+            Intent i = new Intent(ContactInfoActivity.this, MainActivity.class);
             startActivity(i);
         }
     };
@@ -76,7 +92,7 @@ public class ContactInfoActivity extends AppCompatActivity {
     private final View.OnClickListener backClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent i = new Intent(ContactInfoActivity.this, ContactAllActivity.class);
+            Intent i = new Intent(ContactInfoActivity.this, MainActivity.class);
             startActivity(i);
         }
     };

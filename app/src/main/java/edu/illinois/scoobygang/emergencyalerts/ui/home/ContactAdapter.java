@@ -47,10 +47,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder>{
             @Override
             public void onClick(View view)
             {
-                view.setBackgroundColor(Color.GRAY);
-
                 listener.click(index);
-
             }
         });
     }
