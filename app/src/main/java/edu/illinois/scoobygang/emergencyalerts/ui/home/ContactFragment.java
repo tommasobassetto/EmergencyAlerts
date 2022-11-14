@@ -23,9 +23,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import edu.illinois.scoobygang.emergencyalerts.ContactAddActivity;
 import edu.illinois.scoobygang.emergencyalerts.ContactAllActivity;
+import edu.illinois.scoobygang.emergencyalerts.ContactInfoActivity;
 import edu.illinois.scoobygang.emergencyalerts.R;
 import edu.illinois.scoobygang.emergencyalerts.data.Contact;
 import edu.illinois.scoobygang.emergencyalerts.databinding.FragmentHomeBinding;
@@ -50,7 +53,6 @@ public class ContactFragment extends Fragment {
     private final View.OnClickListener addClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Log.d("#####", "clicked add!");
             Intent i = new Intent(getActivity(), ContactAddActivity.class);
             startActivity(i);
         }
@@ -71,8 +73,9 @@ public class ContactFragment extends Fragment {
         listener = new ClickListener() {
             @Override
             public void click(int index){
-                Toast.makeText(root.getContext(),"clicked item index is "+index,Toast.LENGTH_LONG).show();
-
+                Intent i = new Intent(getActivity(), ContactInfoActivity.class);
+                i.putExtra("CONTACT_ID", list.get(index).getContactID());
+                startActivity(i);
             }
         };
 
@@ -101,16 +104,21 @@ public class ContactFragment extends Fragment {
         String[] filenames = null;
         try {
             File sharedPrefsDir = new File(getActivity().getApplicationInfo().dataDir,"shared_prefs");
+            Log.d("!!!!!!!!", getActivity().getApplicationInfo().dataDir);
             if (sharedPrefsDir.exists() && sharedPrefsDir.isDirectory()) {
                 filenames = sharedPrefsDir.list();
             }
             if (filenames != null) {
                 for (String filename : filenames) {
-                    SharedPreferences contactPrefs = getActivity().getSharedPreferences(filename, MODE_PRIVATE);
-                    Contact contact = new Contact();
-                    contact.setName(contactPrefs.getString("name", ""));
-                    contact.setContactID(contactPrefs.getString("contactID", ""));
-                    contacts.add(contact);
+                    if (!Objects.equals(filename, "contactID.xml")) {
+                        Log.d("######", filename);
+                        filename = filename.replace(".xml", "");
+                        SharedPreferences contactPrefs = getActivity().getSharedPreferences(filename, MODE_PRIVATE);
+                        Contact contact = new Contact();
+                        contact.setName(contactPrefs.getString("name", "pizza"));
+                        contact.setContactID(contactPrefs.getString("contactID", "pie"));
+                        contacts.add(contact);
+                    }
                 }
             }
         } catch (Exception e) {
