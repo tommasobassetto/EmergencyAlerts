@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import edu.illinois.scoobygang.emergencyalerts.ui.home.ContactFragment;
+
 public class ContactAddActivity extends AppCompatActivity {
 
     Button back, save;
@@ -40,6 +42,7 @@ public class ContactAddActivity extends AppCompatActivity {
                 SharedPreferences contactPrefs = getSharedPreferences(Integer.toString(contactID), MODE_PRIVATE);
                 SharedPreferences.Editor contactEditor = contactPrefs.edit();
 
+                contactEditor.putString("contactID", Integer.toString(contactID));
                 contactEditor.putString("name", name.toString().trim());
                 contactEditor.putString("phone", phone.toString().trim());
                 contactEditor.putString("email", email.toString().trim());
@@ -54,7 +57,7 @@ public class ContactAddActivity extends AppCompatActivity {
     private final View.OnClickListener backClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent i = new Intent(ContactAddActivity.this, ContactAllActivity.class);
+            Intent i = new Intent(ContactAddActivity.this, ContactFragment.class);
             startActivity(i);
         }
     };

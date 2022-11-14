@@ -1,3 +1,7 @@
+/*
+Nothing of importance in this file.
+ */
+
 package edu.illinois.scoobygang.emergencyalerts.ui.home;
 
 import android.os.Bundle;

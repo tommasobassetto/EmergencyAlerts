@@ -3,11 +3,13 @@ package edu.illinois.scoobygang.emergencyalerts;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.Objects;
 
@@ -27,6 +29,58 @@ public class ContactInfoActivity extends AppCompatActivity {
         return data;
     }
 
+    private final View.OnClickListener saveClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            // open editor to contact's preferences file
+            SharedPreferences contact = getSharedPreferences(contactID, MODE_PRIVATE);
+            SharedPreferences.Editor editor = contact.edit();
+
+            // read data from text views
+            String[] name = removeWhitespace(nameView.getText().toString());
+            String[] phone = removeWhitespace(phoneView.getText().toString());
+            String[] email = removeWhitespace(emailView.getText().toString());
+
+            // save contact info
+            if (name[1].equals("")) {
+                editor.putString("name", name[1]);
+            } else {
+                editor.putString("name", name[0]);
+            } if (phone[1].equals("")) {
+                editor.putString("phone", phone[1]);
+            } else {
+                editor.putString("phone", phone[0]);
+            } if (email[1].equals("")) {
+                editor.putString("email", email[1]);
+            } else {
+                editor.putString("email", email[0]);
+            }
+            editor.apply();
+
+            Toast.makeText(getApplicationContext(),"Added contact",Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private final View.OnClickListener deleteClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            SharedPreferences contactPrefs = getSharedPreferences(contactID, MODE_PRIVATE);
+            contactPrefs.edit().clear().apply();
+
+            Toast.makeText(getApplicationContext(),"Deleted contact",Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(ContactInfoActivity.this, ContactAllActivity.class);
+            startActivity(i);
+        }
+    };
+
+    private final View.OnClickListener backClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent i = new Intent(ContactInfoActivity.this, ContactAllActivity.class);
+            startActivity(i);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,43 +96,9 @@ public class ContactInfoActivity extends AppCompatActivity {
         back = findViewById(R.id.back);
         delete = findViewById(R.id.delete);
 
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // open editor to contact's preferences file
-                SharedPreferences contact = getSharedPreferences(contactID, MODE_PRIVATE);
-                SharedPreferences.Editor editor = contact.edit();
-
-                // read data from text views
-                String[] name = removeWhitespace(nameView.getText().toString());
-                String[] phone = removeWhitespace(phoneView.getText().toString());
-                String[] email = removeWhitespace(emailView.getText().toString());
-
-                // save contact info
-                if (name[1].equals("")) {
-                    editor.putString("name", name[1]);
-                } else {
-                    editor.putString("name", name[0]);
-                } if (phone[1].equals("")) {
-                    editor.putString("phone", phone[1]);
-                } else {
-                    editor.putString("phone", phone[0]);
-                } if (email[1].equals("")) {
-                    editor.putString("email", email[1]);
-                } else {
-                    editor.putString("email", email[0]);
-                }
-                editor.apply();
-            }
-        });
-
-        delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                SharedPreferences contactPrefs = getSharedPreferences(contactID, MODE_PRIVATE);
-                contactPrefs.edit().clear().apply();
-            }
-        });
+        save.setOnClickListener(this.saveClicked);
+        back.setOnClickListener(this.backClicked);
+        delete.setOnClickListener(this.deleteClicked);
     }
 
     @Override
