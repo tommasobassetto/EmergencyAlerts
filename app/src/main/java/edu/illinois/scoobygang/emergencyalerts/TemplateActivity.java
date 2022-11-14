@@ -1,6 +1,7 @@
 package edu.illinois.scoobygang.emergencyalerts;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -30,7 +31,7 @@ public class TemplateActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         List<Message> list = new ArrayList<>();
-        list = getData();
+        //list = getData();
 
         recyclerView = (RecyclerView) findViewById(R.id.message_recycler);
 //        listener = new ClickListener() {
@@ -51,12 +52,12 @@ public class TemplateActivity extends AppCompatActivity {
 //    }
 
     // Sample data for RecyclerView
-    private List<Message> getData()
-    {
-        List<Message> list = new ArrayList<>();
-        list.add(new Message("I HATE ANDROID", "I HATE ANDROID"));
-        list.add(new Message("REALLY I DO", "REALLY I DO"));
-
-        return list;
-    }
+//    private List<Message> getData()
+//    {
+//        List<Message> list = new ArrayList<>();
+//        list.add(new Message("I HATE ANDROID", "I HATE ANDROID"));
+//        list.add(new Message("REALLY I DO", "REALLY I DO"));
+//
+//        return list;
+//    }
 }

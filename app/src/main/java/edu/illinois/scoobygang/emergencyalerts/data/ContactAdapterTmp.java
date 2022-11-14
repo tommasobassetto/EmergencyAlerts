@@ -17,13 +17,13 @@ import java.util.ArrayList;
 
 import edu.illinois.scoobygang.emergencyalerts.R;
 
-public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHolder> {
+public class ContactAdapterTmp extends RecyclerView.Adapter<ContactAdapterTmp.ViewHolder> {
 
     // creating a variable for array list and context.
     private ArrayList<Contact> contacts;
 
     // creating a constructor for our variables.
-    public ContactAdapter(ArrayList<Contact> contacts, Context context) {
+    public ContactAdapterTmp(ArrayList<Contact> contacts, Context context) {
         this.contacts = contacts;
     }
 
@@ -39,14 +39,14 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactAdapter.ViewHold
 
     @NonNull
     @Override
-    public ContactAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ContactAdapterTmp.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // below line is to inflate our layout.
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_contact, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ContactAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull ContactAdapterTmp.ViewHolder holder, int position) {
         // setting data to our views of recycler view.
         Contact contact = contacts.get(position);
         holder.contact_name.setText(contact.getName());

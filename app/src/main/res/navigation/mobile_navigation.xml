@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_contacts"
-        android:name="edu.illinois.scoobygang.emergencyalerts.ui.home.HomeFragment"
+        android:name="edu.illinois.scoobygang.emergencyalerts.ui.home.ContactFragment"
         android:label="@string/title_contacts"
         tools:layout="@layout/fragment_home" />
 

@@ -7,11 +7,11 @@ public class Contact {
     private List<ContactPlatform> contactPlatformList;
     private ContactPlatform defaultPlatform;
 
-    private String name, phoneNumber, emailAddress;
+    private String name, phoneNumber, emailAddress, contactID;
 
     public Contact() {
-        contactPlatformList = new ArrayList<>();
-        name = phoneNumber = emailAddress = "";
+        this.contactPlatformList = new ArrayList<>();
+        this.name = this.phoneNumber = this.emailAddress = "";
     }
 
     public void addPlatform(ContactPlatform platform) {
@@ -37,10 +37,12 @@ public class Contact {
     public void setName(String name) {
         this.name = name;
     }
+    public void setContactID(String contactID) { this.contactID = contactID; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
     public void setEmailAddress (String emailAddress) { this.emailAddress = emailAddress; }
 
-    public String getName() { return name; }
-    public String getPhoneNumber() { return phoneNumber; }
-    public String getEmailAddress() { return emailAddress; }
+    public String getName() { return this.name; }
+    public String getContactID() { return this.contactID; }
+    public String getPhoneNumber() { return this.phoneNumber; }
+    public String getEmailAddress() { return this.emailAddress; }
 }
