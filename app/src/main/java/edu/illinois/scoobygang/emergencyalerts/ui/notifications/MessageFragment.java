@@ -1,6 +1,7 @@
 package edu.illinois.scoobygang.emergencyalerts.ui.notifications;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -68,6 +69,7 @@ public class MessageFragment extends Fragment {
     // Sample data for RecyclerView
     private List<Message> getData()
     {
+//        Log.d("####", "made it!");
         List<Message> list = new ArrayList<>();
         list.add(new Message("I HATE ANDROID", "I HATE ANDROID"));
         list.add(new Message("REALLY I DO", "REALLY I DO"));

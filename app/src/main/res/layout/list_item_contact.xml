@@ -6,6 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="8dp"
     android:elevation="8dp"
+    android:background="@color/cardview_dark_background"
     app:cardCornerRadius="8dp">
 
     <RelativeLayout
