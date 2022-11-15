@@ -5,22 +5,26 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import edu.illinois.scoobygang.emergencyalerts.ui.home.ContactFragment;
+
 public class ContactAddActivity extends AppCompatActivity {
 
     Button back, save;
     EditText name, phone, email;
+    String nameStr, phoneStr, emailStr;
 
     private boolean fieldsValid() {
-        if (name.length() == 0) {
+        if (nameStr.length() == 0) {
             name.setError("This field is required");
             return false;
-        } if (email.length() == 0 && phone.length() == 0) {
-            Toast.makeText(this, "Please add at least one contact method", Toast.LENGTH_SHORT).show();
+        } if (emailStr.length() == 0 && phoneStr.length() == 0) {
+            Toast.makeText(this, "Add at least one means of contact", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -29,6 +33,11 @@ public class ContactAddActivity extends AppCompatActivity {
     private final View.OnClickListener saveClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+
+            nameStr = name.getText().toString().trim();
+            phoneStr = phone.getText().toString().trim();
+            emailStr = email.getText().toString().trim();
+
             if (fieldsValid()) {
                 SharedPreferences contactIdPrefs = getSharedPreferences("contactID", MODE_PRIVATE);
                 SharedPreferences.Editor contactIDEditor = contactIdPrefs.edit();
@@ -40,12 +49,13 @@ public class ContactAddActivity extends AppCompatActivity {
                 SharedPreferences contactPrefs = getSharedPreferences(Integer.toString(contactID), MODE_PRIVATE);
                 SharedPreferences.Editor contactEditor = contactPrefs.edit();
 
-                contactEditor.putString("name", name.toString().trim());
-                contactEditor.putString("phone", phone.toString().trim());
-                contactEditor.putString("email", email.toString().trim());
+                contactEditor.putString("contactID", Integer.toString(contactID));
+                contactEditor.putString("name", nameStr);
+                contactEditor.putString("phone", phoneStr);
+                contactEditor.putString("email", emailStr);
                 contactEditor.apply();
 
-                Intent i = new Intent(ContactAddActivity.this, ContactAllActivity.class);
+                Intent i = new Intent(ContactAddActivity.this, MainActivity.class);
                 startActivity(i);
             }
         }
@@ -54,7 +64,7 @@ public class ContactAddActivity extends AppCompatActivity {
     private final View.OnClickListener backClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            Intent i = new Intent(ContactAddActivity.this, ContactAllActivity.class);
+            Intent i = new Intent(ContactAddActivity.this, MainActivity.class);
             startActivity(i);
         }
     };

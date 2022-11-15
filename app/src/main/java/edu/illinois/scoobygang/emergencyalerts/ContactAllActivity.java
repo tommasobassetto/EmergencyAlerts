@@ -5,28 +5,99 @@ reference: https://www.geeksforgeeks.org/searchview-in-android-with-recyclerview
 package edu.illinois.scoobygang.emergencyalerts;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.content.SharedPreferences;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.widget.SearchView;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
-import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.illinois.scoobygang.emergencyalerts.data.Contact;
-import edu.illinois.scoobygang.emergencyalerts.data.ContactAdapter;
+import edu.illinois.scoobygang.emergencyalerts.ui.home.ContactAdapter;
+import edu.illinois.scoobygang.emergencyalerts.ui.home.ClickListener;
 
 public class ContactAllActivity extends AppCompatActivity {
 
+    private ContactAdapter adapter;
+    private RecyclerView recyclerView;
+    private ClickListener listener;
+    private Button add;
+
+    private final View.OnClickListener addClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Log.d("#####", "clicked add!");
+            Intent i = new Intent(ContactAllActivity.this, ContactAddActivity.class);
+            startActivity(i);
+        }
+    };
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.fragment_home);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.contact_toolbar);
+//        toolbar.setTitle("");
+//        setSupportActionBar(toolbar);
+
+
+        List<Contact> list = new ArrayList<>();
+
+        recyclerView = (RecyclerView) findViewById(R.id.contacts_recycler);
+//        listener = new ClickListener() {
+//            @Override
+//            public void click(int index){
+//                Toast.makeTexT(this,"clicked item index is "+index,Toast.LENGTH_LONG).show();
+//            }
+//        };
+        recyclerView.setLayoutManager(new LinearLayoutManager(ContactAllActivity.this));
+        recyclerView.setHasFixedSize(true);
+        adapter = new ContactAdapter(list, listener);
+        recyclerView.setAdapter(adapter);
+
+        add = findViewById(R.id.add_contact);
+        add.setOnClickListener(this.addClicked);
+    }
+
+
+//    @Override
+//    public void onBackPressed()
+//    {
+//        super.onBackPressed();
+//    }
+
+    // Sample data for RecyclerView
+//    private List<Contact> getData()
+//    {
+//        List<Contact> contacts = new ArrayList<>();
+//        Contact c1, c2;
+//        c1 = new Contact();
+//        c2 = new Contact();
+//        c1.setName("John Smith");
+//        c2.setName("Jane Doe");
+//        contacts.add(c1);
+//        contacts.add(c2);
+//
+//        return contacts;
+//    }
+
+}
+
+/*
     // creating variables for
     // our ui components.
     private RecyclerView contactsRV;
+
+    ClickListener listener;
 
     // variable for our adapter
     // class and array list
@@ -39,7 +110,7 @@ public class ContactAllActivity extends AppCompatActivity {
         setContentView(R.layout.fragment_home);
 
         // initializing our variables.
-        contactsRV = findViewById(R.id.list_of_contacts);
+        contactsRV = (RecyclerView) findViewById(R.id.list_of_contacts);
 
         // calling method to
         // build recycler view.
@@ -101,7 +172,7 @@ public class ContactAllActivity extends AppCompatActivity {
         } else {
             // at last we are passing that filtered
             // list to our adapter class.
-            adapter.filterList(filteredlist);
+            //adapter.filterList(filteredlist);
         }
     }
 
@@ -127,24 +198,29 @@ public class ContactAllActivity extends AppCompatActivity {
 //        }
 
         Contact c1, c2;
-        c1 = c2 = new Contact();
+        c1 = new Contact();
+        c2 = new Contact();
         c1.setName("John Smith");
         c2.setName("Jane Doe");
         contacts.add(c1);
         contacts.add(c2);
 
-        // initializing our adapter class.
-        adapter = new ContactAdapter(contacts, ContactAllActivity.this);
+//        // initializing our adapter class.
+//        adapter = new ContactAdapter(contacts, listener);
 
-        // adding layout manager to our recycler view.
-        contactsRV.setHasFixedSize(true);
+//        // adding layout manager to our recycler view.
+//        contactsRV.setHasFixedSize(true);
+//
+//        // setting layout manager
+//        // to our recycler view.
+//        contactsRV.setLayoutManager(new LinearLayoutManager(this));
+//
+//        // setting adapter to
+//        // our recycler view.
+//        contactsRV.setAdapter(adapter);
 
-        // setting layout manager
-        // to our recycler view.
-        contactsRV.setLayoutManager(new LinearLayoutManager(this));
-
-        // setting adapter to
-        // our recycler view.
+        adapter = new ContactAdapter(contacts, listener);
         contactsRV.setAdapter(adapter);
+        contactsRV.setLayoutManager(new LinearLayoutManager(ContactAllActivity.this));
     }
-}
+*/

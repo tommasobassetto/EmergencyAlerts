@@ -1,13 +1,14 @@
 package edu.illinois.scoobygang.emergencyalerts.ui.notifications;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Gravity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
+import android.widget.EditText;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -18,16 +19,30 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import edu.illinois.scoobygang.emergencyalerts.R;
 import edu.illinois.scoobygang.emergencyalerts.data.Message;
 import edu.illinois.scoobygang.emergencyalerts.databinding.FragmentMessageBinding;
 
 public class MessageFragment extends Fragment {
+    private View root;
     private SearchView searchbar;
     private MessageAdapter adapter;
     private RecyclerView recyclerView;
@@ -35,29 +50,34 @@ public class MessageFragment extends Fragment {
     private ClickListener listener;
     private ArrayList<Message> templateList;
 
-//    @Override
-//    public void onBackPressed()
-//    {
-//        super.onBackPressed();
-//    }
+    // variables for data storing
+    private static final String SHARED_PREFS = "saved_messages";
+    private static final String MESSAGE_KEY = "messages_json";
+    private SharedPreferences sharedpreferences;
+    private EditText messageEdit;
+    private final String storageFileName = "message_storage.json";
+
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         MessagesViewModel messagesViewModel =
                 new ViewModelProvider(this).get(MessagesViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_message, container, false);
+        root = inflater.inflate(R.layout.fragment_message, container, false);
 
+        // retrieve data from local json file
+        sharedpreferences = root.getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         templateList = getData();
 
         listener = new ClickListener() {
             @Override
             public void click(int index){
-//                onButtonShowPopupWindowClick(root, inflater);
                 EditMessageClicked(root, index);
-//                Toast.makeText(root.getContext(),"clicked item index is "+index,Toast.LENGTH_LONG).show();
             }
         };
+
+        FloatingActionButton myFab = (FloatingActionButton) root.findViewById(R.id.add_message_fab);
+        myFab.setOnClickListener(v -> AddMessageClicked(root));
 
         recyclerView = root.findViewById(R.id.message_recycler);
         adapter = new MessageAdapter(templateList, listener);
@@ -67,12 +87,6 @@ public class MessageFragment extends Fragment {
         searchbar = root.findViewById(R.id.message_searchbar);
         searchbar.setQueryHint("Search Message...");
 
-//        Toolbar toolbar = binding.messageToolbar;
-//        toolbar.setTitle("");
-//        setSupportActionBar(toolbar);
-
-//        final TextView textView = binding.MessagesViewModel;
-//        MessagesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
 
@@ -80,34 +94,21 @@ public class MessageFragment extends Fragment {
     private ArrayList<Message> getData()
     {
         ArrayList<Message> list = new ArrayList<>();
-        list.add(new Message("I HATE ANDROID", "I HATE ANDROID"));
-        list.add(new Message("REALLY I DO", "REALLY I DO"));
+
+        String json_string = sharedpreferences.getString(MESSAGE_KEY, null);
+        try {
+            JSONArray json_array = new JSONArray(json_string);
+            for (int i = 0; i < json_array.length(); i++){
+                JSONObject json_obj = json_array.getJSONObject(i);
+                String title = json_obj.getString("title");
+                String body = json_obj.getString("body");
+                list.add(new Message(title, body));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
         return list;
-    }
-
-    public void onButtonShowPopupWindowClick(View view, LayoutInflater inflater) {
-        // inflate the layout of the popup window
-        View popupView = inflater.inflate(R.layout.popup_window, null);
-
-        // create the popup window
-        int width = LinearLayout.LayoutParams.WRAP_CONTENT;
-        int height = LinearLayout.LayoutParams.WRAP_CONTENT;
-        boolean focusable = true; // lets taps outside the popup also dismiss it
-        final PopupWindow popupWindow = new PopupWindow(popupView, width, height, focusable);
-
-        // show the popup window
-        // which view you pass in doesn't matter, it is only used for the window tolken
-        popupWindow.showAtLocation(view, Gravity.CENTER, 0, 0);
-
-        // dismiss the popup window when touched
-        popupView.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                popupWindow.dismiss();
-                return true;
-            }
-        });
     }
 
     public void AddMessageClicked(View view) {
@@ -125,9 +126,19 @@ public class MessageFragment extends Fragment {
         alert.setNegativeButton("Cancel", (dialog, which) -> Toast.makeText(view.getContext(), "Changes Discarded", Toast.LENGTH_SHORT).show());
 
         alert.setPositiveButton("Done", (dialog, which) -> {
-            String user = inputTitle.getText().toString();
-            String pass = inputBody.getText().toString();
-            Toast.makeText(view.getContext(), "Message Template Saved", Toast.LENGTH_LONG).show();
+            String title = inputTitle.getText().toString();
+            String body = inputBody.getText().toString();
+
+            Message new_template = new Message(title, body);
+            templateList.add(new_template);
+
+            adapter.notifyItemInserted(templateList.size());
+            adapter.notifyItemRangeChanged(0, templateList.size());
+
+            String json_string = new Gson().toJson(templateList);
+            saveMessage(json_string);
+
+            Toast.makeText(view.getContext(), "Message Saved", Toast.LENGTH_LONG).show();
         });
         AlertDialog dialog = alert.create();
         dialog.show();
@@ -151,19 +162,55 @@ public class MessageFragment extends Fragment {
         alert.setNegativeButton("Cancel", (dialog, which) -> Toast.makeText(view.getContext(), "Changes Discarded", Toast.LENGTH_SHORT).show());
 
         alert.setPositiveButton("Done", (dialog, which) -> {
-            // TODO: save the data
-            String user = inputTitle.getText().toString();
-            String pass = inputBody.getText().toString();
+            String title = inputTitle.getText().toString();
+            String body = inputBody.getText().toString();
 
+            Message new_template = new Message(title, body);
+            templateList.set(index, new_template);
 
-            Toast.makeText(view.getContext(), "Message Template Saved", Toast.LENGTH_LONG).show();
+            adapter.notifyItemChanged(index);
+            adapter.notifyItemRangeChanged(0, templateList.size());
+
+            String json_string = new Gson().toJson(templateList);
+            saveMessage(json_string);
+
+            Toast.makeText(view.getContext(), "Message Saved", Toast.LENGTH_LONG).show();
         });
+
+        alert.setNeutralButton("Delete", (dialog, which) -> {
+            templateList.remove(index);
+
+            adapter.notifyItemChanged(index);
+            adapter.notifyItemRangeChanged(0, templateList.size());
+
+            String json_string = new Gson().toJson(templateList);
+            saveMessage(json_string);
+
+            Toast.makeText(view.getContext(), "Message Deleted", Toast.LENGTH_LONG).show();
+        });
+
         AlertDialog dialog = alert.create();
         dialog.show();
     }
 
+//    @Override
+//    public void onBackPressed()
+//    {
+//        Log.d("Debug", "back press");
+//        super.onBackPressed();
+//    }
+
+    private void saveMessage(String msg) {
+        Log.d("Debug", "saving message");
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(MESSAGE_KEY, msg);
+        editor.apply();
+    }
+
     @Override
     public void onDestroyView() {
+        Log.d("Debug", "on destroy message fragment");
+
         super.onDestroyView();
         binding = null;
     }
