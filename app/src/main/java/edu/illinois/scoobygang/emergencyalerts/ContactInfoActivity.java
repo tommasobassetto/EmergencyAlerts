@@ -35,7 +35,6 @@ public class ContactInfoActivity extends AppCompatActivity {
         String path = getApplicationInfo().dataDir + "/shared_prefs/";
         String filename = contactID + ".xml";
         String fullname = path + filename;
-        Log.d("fullname", fullname);
         File prefsFile = new File(fullname);
         if (prefsFile.delete()) {
             Log.d("status", "successful!");
@@ -136,5 +135,4 @@ public class ContactInfoActivity extends AppCompatActivity {
             emailView.setText(email);
         }
     }
-
 }

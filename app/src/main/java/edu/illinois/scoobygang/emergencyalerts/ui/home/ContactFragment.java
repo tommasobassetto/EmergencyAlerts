@@ -39,7 +39,6 @@ public class ContactFragment extends Fragment {
     private RecyclerView recyclerView;
     private FragmentHomeBinding binding;
     private ClickListener listener;
-
     private Button add;
 
     List<Contact> list;
@@ -104,14 +103,12 @@ public class ContactFragment extends Fragment {
         String[] filenames = null;
         try {
             File sharedPrefsDir = new File(getActivity().getApplicationInfo().dataDir,"shared_prefs");
-            Log.d("!!!!!!!!", getActivity().getApplicationInfo().dataDir);
             if (sharedPrefsDir.exists() && sharedPrefsDir.isDirectory()) {
                 filenames = sharedPrefsDir.list();
             }
             if (filenames != null) {
                 for (String filename : filenames) {
                     if (!Objects.equals(filename, "contactID.xml")) {
-                        Log.d("######", filename);
                         filename = filename.replace(".xml", "");
                         SharedPreferences contactPrefs = getActivity().getSharedPreferences(filename, MODE_PRIVATE);
                         Contact contact = new Contact();
