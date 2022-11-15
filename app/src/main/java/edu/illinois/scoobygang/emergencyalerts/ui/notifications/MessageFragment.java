@@ -3,16 +3,12 @@ package edu.illinois.scoobygang.emergencyalerts.ui.notifications;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Debug;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.PopupWindow;
 import android.widget.SearchView;
 import android.widget.Toast;
 
@@ -23,6 +19,9 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.io.BufferedReader;
@@ -33,7 +32,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.List;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -44,14 +42,20 @@ import edu.illinois.scoobygang.emergencyalerts.data.Message;
 import edu.illinois.scoobygang.emergencyalerts.databinding.FragmentMessageBinding;
 
 public class MessageFragment extends Fragment {
+    private View root;
     private SearchView searchbar;
     private MessageAdapter adapter;
     private RecyclerView recyclerView;
     private FragmentMessageBinding binding;
     private ClickListener listener;
     private ArrayList<Message> templateList;
+
+    // variables for data storing
+    private static final String SHARED_PREFS = "saved_messages";
+    private static final String MESSAGE_KEY = "messages_json";
+    private SharedPreferences sharedpreferences;
+    private EditText messageEdit;
     private final String storageFileName = "message_storage.json";
-    private JSONObject message_json;
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -59,31 +63,21 @@ public class MessageFragment extends Fragment {
         MessagesViewModel messagesViewModel =
                 new ViewModelProvider(this).get(MessagesViewModel.class);
 
-        View root = inflater.inflate(R.layout.fragment_message, container, false);
+        root = inflater.inflate(R.layout.fragment_message, container, false);
 
-//         retrieve data from local json file
-        boolean isFilePresent = isFilePresent(root.getContext(), storageFileName);
-        if(isFilePresent) {
-            String jsonString = read(root.getContext(), storageFileName);
-            try {
-                message_json = new JSONObject(jsonString);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            //do the json parsing here and do the rest of functionality of app
-        } else {
-            boolean isFileCreated = create(root.getContext(), storageFileName, "{}");
-        }
-
+        // retrieve data from local json file
+        sharedpreferences = root.getContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
         templateList = getData();
 
         listener = new ClickListener() {
             @Override
             public void click(int index){
                 EditMessageClicked(root, index);
-//                Toast.makeText(root.getContext(),"clicked item index is "+index,Toast.LENGTH_LONG).show();
             }
         };
+
+        FloatingActionButton myFab = (FloatingActionButton) root.findViewById(R.id.add_message_fab);
+        myFab.setOnClickListener(v -> AddMessageClicked(root));
 
         recyclerView = root.findViewById(R.id.message_recycler);
         adapter = new MessageAdapter(templateList, listener);
@@ -100,21 +94,16 @@ public class MessageFragment extends Fragment {
     private ArrayList<Message> getData()
     {
         ArrayList<Message> list = new ArrayList<>();
-        list.add(new Message("I HATE ANDROID", "I HATE ANDROID"));
-        list.add(new Message("REALLY I DO", "REALLY I DO"));
 
+        String json_string = sharedpreferences.getString(MESSAGE_KEY, null);
         try {
-            JSONArray messages = message_json.getJSONArray("{}");
-            for (int i = 0; i < messages.length(); i++) {
-                JSONObject m = messages.getJSONObject(i);
-                String title = m.getString("title");
-                String body = m.getString("body");
-
-                Message msg = new Message(title, body);
-
-                list.add(msg);
+            JSONArray json_array = new JSONArray(json_string);
+            for (int i = 0; i < json_array.length(); i++){
+                JSONObject json_obj = json_array.getJSONObject(i);
+                String title = json_obj.getString("title");
+                String body = json_obj.getString("body");
+                list.add(new Message(title, body));
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -137,10 +126,17 @@ public class MessageFragment extends Fragment {
         alert.setNegativeButton("Cancel", (dialog, which) -> Toast.makeText(view.getContext(), "Changes Discarded", Toast.LENGTH_SHORT).show());
 
         alert.setPositiveButton("Done", (dialog, which) -> {
-            // TODO: save the data
             String title = inputTitle.getText().toString();
             String body = inputBody.getText().toString();
 
+            Message new_template = new Message(title, body);
+            templateList.add(new_template);
+
+            adapter.notifyItemInserted(templateList.size());
+            adapter.notifyItemRangeChanged(0, templateList.size());
+
+            String json_string = new Gson().toJson(templateList);
+            saveMessage(json_string);
 
             Toast.makeText(view.getContext(), "Message Template Saved", Toast.LENGTH_LONG).show();
         });
@@ -166,7 +162,6 @@ public class MessageFragment extends Fragment {
         alert.setNegativeButton("Cancel", (dialog, which) -> Toast.makeText(view.getContext(), "Changes Discarded", Toast.LENGTH_SHORT).show());
 
         alert.setPositiveButton("Done", (dialog, which) -> {
-            // TODO: save the data
             String title = inputTitle.getText().toString();
             String body = inputBody.getText().toString();
 
@@ -174,7 +169,10 @@ public class MessageFragment extends Fragment {
             templateList.set(index, new_template);
 
             adapter.notifyItemChanged(index);
-            adapter.notifyItemRangeChanged(index, templateList.size());
+            adapter.notifyItemRangeChanged(0, templateList.size());
+
+            String json_string = new Gson().toJson(templateList);
+            saveMessage(json_string);
 
             Toast.makeText(view.getContext(), "Message Template Saved", Toast.LENGTH_LONG).show();
         });
@@ -189,52 +187,16 @@ public class MessageFragment extends Fragment {
 //        super.onBackPressed();
 //    }
 
-    private String read(Context context, String fileName) {
-        try {
-            FileInputStream fis = context.openFileInput(fileName);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String line;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line);
-            }
-            return sb.toString();
-        } catch (FileNotFoundException fileNotFound) {
-            return null;
-        } catch (IOException ioException) {
-            return null;
-        }
-    }
-
-    private boolean create(Context context, String fileName, String jsonString){
-        String FILENAME = fileName;
-        try {
-            FileOutputStream fos = context.openFileOutput(fileName,Context.MODE_PRIVATE);
-            if (jsonString != null) {
-                fos.write(jsonString.getBytes());
-            }
-            fos.close();
-            return true;
-        } catch (FileNotFoundException fileNotFound) {
-            return false;
-        } catch (IOException ioException) {
-            return false;
-        }
-
-    }
-
-    public boolean isFilePresent(Context context, String fileName) {
-        String path = context.getFilesDir().getAbsolutePath() + "/" + fileName;
-        File file = new File(path);
-
-        return file.exists();
+    private void saveMessage(String msg) {
+        Log.d("Debug", "saving message");
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(MESSAGE_KEY, msg);
+        editor.apply();
     }
 
     @Override
     public void onDestroyView() {
         Log.d("Debug", "on destroy message fragment");
-        // TODO: save the existing data every time destroy the fragment
 
         super.onDestroyView();
         binding = null;
