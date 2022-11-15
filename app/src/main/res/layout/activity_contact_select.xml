@@ -17,7 +17,7 @@
         android:textSize="40sp"
         android:gravity="center"
         android:text="Select contacts"
-        android:background="#888888"
+        android:background="#FF6200EE"
         android:textColor="#FFFFFF"
         android:layout_marginBottom="5dp"/>
 
