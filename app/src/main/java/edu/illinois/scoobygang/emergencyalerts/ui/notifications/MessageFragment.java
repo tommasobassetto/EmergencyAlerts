@@ -95,7 +95,11 @@ public class MessageFragment extends Fragment {
     {
         ArrayList<Message> list = new ArrayList<>();
 
-        String json_string = sharedpreferences.getString(MESSAGE_KEY, MESSAGE_KEY);
+        String json_string = sharedpreferences.getString(MESSAGE_KEY, null);
+        if (json_string == null || json_string.length() == 0) {
+            return list;
+        }
+
         try {
             JSONArray json_array = new JSONArray(json_string);
             for (int i = 0; i < json_array.length(); i++){
