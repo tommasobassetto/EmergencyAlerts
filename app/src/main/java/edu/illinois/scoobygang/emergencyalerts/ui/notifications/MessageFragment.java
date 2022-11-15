@@ -138,7 +138,7 @@ public class MessageFragment extends Fragment {
             String json_string = new Gson().toJson(templateList);
             saveMessage(json_string);
 
-            Toast.makeText(view.getContext(), "Message Template Saved", Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(), "Message Saved", Toast.LENGTH_LONG).show();
         });
         AlertDialog dialog = alert.create();
         dialog.show();
@@ -174,8 +174,21 @@ public class MessageFragment extends Fragment {
             String json_string = new Gson().toJson(templateList);
             saveMessage(json_string);
 
-            Toast.makeText(view.getContext(), "Message Template Saved", Toast.LENGTH_LONG).show();
+            Toast.makeText(view.getContext(), "Message Saved", Toast.LENGTH_LONG).show();
         });
+
+        alert.setNeutralButton("Delete", (dialog, which) -> {
+            templateList.remove(index);
+
+            adapter.notifyItemChanged(index);
+            adapter.notifyItemRangeChanged(0, templateList.size());
+
+            String json_string = new Gson().toJson(templateList);
+            saveMessage(json_string);
+
+            Toast.makeText(view.getContext(), "Message Deleted", Toast.LENGTH_LONG).show();
+        });
+
         AlertDialog dialog = alert.create();
         dialog.show();
     }
