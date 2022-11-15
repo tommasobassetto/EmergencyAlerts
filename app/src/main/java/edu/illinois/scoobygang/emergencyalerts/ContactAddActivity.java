@@ -55,8 +55,6 @@ public class ContactAddActivity extends AppCompatActivity {
                 contactEditor.putString("email", emailStr);
                 contactEditor.apply();
 
-                Log.d("#### datadir in add", getApplicationInfo().dataDir);
-
                 Intent i = new Intent(ContactAddActivity.this, MainActivity.class);
                 startActivity(i);
             }
