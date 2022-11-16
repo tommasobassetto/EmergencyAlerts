@@ -32,6 +32,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -112,6 +114,8 @@ public class MessageFragment extends Fragment {
             e.printStackTrace();
         }
 
+        Collections.sort(list, new MessageComparator());
+
         return list;
     }
 
@@ -135,6 +139,7 @@ public class MessageFragment extends Fragment {
 
             Message new_template = new Message(title, body);
             templateList.add(new_template);
+            Collections.sort(templateList, new MessageComparator());
 
             adapter.notifyItemInserted(templateList.size());
             adapter.notifyItemRangeChanged(0, templateList.size());
@@ -171,6 +176,7 @@ public class MessageFragment extends Fragment {
 
             Message new_template = new Message(title, body);
             templateList.set(index, new_template);
+            Collections.sort(templateList, new MessageComparator());
 
             adapter.notifyItemChanged(index);
             adapter.notifyItemRangeChanged(0, templateList.size());
@@ -184,8 +190,8 @@ public class MessageFragment extends Fragment {
         alert.setNeutralButton("Delete", (dialog, which) -> {
             templateList.remove(index);
 
-            adapter.notifyItemChanged(index);
-            adapter.notifyItemRangeChanged(0, templateList.size());
+            adapter.notifyItemRemoved(index);
+            adapter.notifyItemRangeRemoved(index, templateList.size());
 
             String json_string = new Gson().toJson(templateList);
             saveMessage(json_string);
@@ -217,5 +223,11 @@ public class MessageFragment extends Fragment {
 
         super.onDestroyView();
         binding = null;
+    }
+
+    class MessageComparator implements Comparator<Message> {
+        public int compare(Message msg1, Message msg2) {
+            return msg1.getTitle().compareTo(msg2.getTitle());
+        }
     }
 }
