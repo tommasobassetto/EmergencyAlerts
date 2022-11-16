@@ -108,8 +108,8 @@ public class ContactFragment extends Fragment {
             }
             if (filenames != null) {
                 for (String filename : filenames) {
-                    if (!Objects.equals(filename, "contactID.xml")) {
-                        filename = filename.replace(".xml", "");
+                    filename = filename.replace(".xml", "");
+                    if (filename.matches("[0-9]+")) {
                         SharedPreferences contactPrefs = getActivity().getSharedPreferences(filename, MODE_PRIVATE);
                         Contact contact = new Contact();
                         contact.setName(contactPrefs.getString("name", "pizza"));
