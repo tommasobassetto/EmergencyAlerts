@@ -5,17 +5,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -30,7 +26,6 @@ import edu.illinois.scoobygang.emergencyalerts.data.Message;
 import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMessageSelectBinding;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.ClickListener;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageAdapter;
-import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageFragment;
 
 public class MessageSelectActivity extends AppCompatActivity {
 
@@ -38,6 +33,7 @@ public class MessageSelectActivity extends AppCompatActivity {
     MessageAdapter adapter;
     RecyclerView recyclerView;
     ClickListener listener;
+    private Message selectedMessage;
 
     private SharedPreferences sharedpreferences;
     private static final String SHARED_PREFS = "saved_messages";
@@ -52,31 +48,30 @@ public class MessageSelectActivity extends AppCompatActivity {
 
         sharedpreferences = getApplicationContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 
-        List<Message> list = new ArrayList<>();
+        List<Message> list;
         list = getData();
 
-        recyclerView = (RecyclerView) findViewById(R.id.message_recycler);
+        listener = new ClickListener() {
+            @Override
+            public void click(int index){
+                if (list.get(index) == null) return;
+                selectedMessage = list.get(index);
+            }
+        };
+
+        recyclerView = findViewById(R.id.message_recycler);
         adapter = new MessageAdapter(list, listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MessageSelectActivity.this));
 
         Button backButton = binding.SelectMessageBackButton;
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                MessageSelectActivity.super.onBackPressed();
-            }
-        });
+        backButton.setOnClickListener(view -> MessageSelectActivity.super.onBackPressed());
 
         Button forwardButton = binding.SelectMessageNextButton;
-        forwardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(MessageSelectActivity.this, MainActivity.class);
-                startActivity(i);
-            }
+        forwardButton.setOnClickListener(view -> {
+            Intent i = new Intent(MessageSelectActivity.this, MainActivity.class);
+            startActivity(i);
         });
-
     }
 
     private ArrayList<Message> getData()
@@ -100,11 +95,11 @@ public class MessageSelectActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Collections.sort(list, new MessageSelectActivity.MessageComparator());
+        list.sort(new MessageComparator());
 
         return list;
     }
-    class MessageComparator implements Comparator<Message> {
+    static class MessageComparator implements Comparator<Message> {
         public int compare(Message msg1, Message msg2) {
             return msg1.getTitle().compareTo(msg2.getTitle());
         }

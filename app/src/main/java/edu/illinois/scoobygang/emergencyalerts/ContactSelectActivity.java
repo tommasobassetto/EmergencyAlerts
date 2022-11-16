@@ -17,6 +17,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import edu.illinois.scoobygang.emergencyalerts.data.Contact;
+import edu.illinois.scoobygang.emergencyalerts.data.ContactPlatform;
 import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityContactSelectBinding;
 import edu.illinois.scoobygang.emergencyalerts.ui.home.ClickListener;
 import edu.illinois.scoobygang.emergencyalerts.ui.home.ContactAdapter;
@@ -32,10 +34,10 @@ import edu.illinois.scoobygang.emergencyalerts.ui.home.ContactFragment;
 public class ContactSelectActivity extends AppCompatActivity {
 
     private ActivityContactSelectBinding binding;
-    private LinearLayout contactList;
     private ContactAdapter adapter;
     private RecyclerView recyclerView;
     private ClickListener listener;
+    private List<ContactPlatform> sendTargets;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +47,13 @@ public class ContactSelectActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         List<Contact> list;
         list = getData();
+
+        listener = new ClickListener() {
+            @Override
+            public void click(int index) {
+                //sendTargets.addAll(list.get(index).getPlatforms());
+            }
+        };
 
         recyclerView = findViewById(R.id.contacts_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(ContactSelectActivity.this));
