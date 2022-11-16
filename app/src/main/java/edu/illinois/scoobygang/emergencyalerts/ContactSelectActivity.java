@@ -46,27 +46,19 @@ public class ContactSelectActivity extends AppCompatActivity {
         List<Contact> list;
         list = getData();
 
-        recyclerView = (RecyclerView) findViewById(R.id.contacts_recycler);
+        recyclerView = findViewById(R.id.contacts_recycler);
         recyclerView.setLayoutManager(new LinearLayoutManager(ContactSelectActivity.this));
         recyclerView.setHasFixedSize(true);
         adapter = new ContactAdapter(list, listener);
         recyclerView.setAdapter(adapter);
 
         Button backButton = binding.SelectContactBackButton;
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ContactSelectActivity.super.onBackPressed();
-            }
-        });
+        backButton.setOnClickListener(view -> ContactSelectActivity.super.onBackPressed());
 
         Button forwardButton = binding.SelectContactNextButton;
-        forwardButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent i = new Intent(ContactSelectActivity.this, MessageSelectActivity.class);
-                startActivity(i);
-            }
+        forwardButton.setOnClickListener(view -> {
+            Intent i = new Intent(ContactSelectActivity.this, MessageSelectActivity.class);
+            startActivity(i);
         });
     }
     private List<Contact> getData()
