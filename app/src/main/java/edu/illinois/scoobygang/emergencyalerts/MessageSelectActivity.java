@@ -22,12 +22,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import edu.illinois.scoobygang.emergencyalerts.data.Message;
 import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMessageSelectBinding;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.ClickListener;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageAdapter;
+import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageFragment;
 
 public class MessageSelectActivity extends AppCompatActivity {
 
@@ -105,6 +108,14 @@ public class MessageSelectActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        Collections.sort(list, new MessageSelectActivity.MessageComparator());
+
         return list;
     }
+    class MessageComparator implements Comparator<Message> {
+        public int compare(Message msg1, Message msg2) {
+            return msg1.getTitle().compareTo(msg2.getTitle());
+        }
+    }
+
 }
