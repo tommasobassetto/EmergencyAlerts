@@ -56,12 +56,6 @@ public class MessageSelectActivity extends AppCompatActivity {
         list = getData();
 
         recyclerView = (RecyclerView) findViewById(R.id.message_recycler);
-//        listener = new ClickListener() {
-//            @Override
-//            public void click(int index){
-//                Toast.makeTexT(this,"clicked item index is "+index,Toast.LENGTH_LONG).show();
-//            }
-//        };
         adapter = new MessageAdapter(list, listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(MessageSelectActivity.this));
