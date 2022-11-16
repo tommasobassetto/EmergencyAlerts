@@ -72,6 +72,8 @@ public class ContactInfoActivity extends AppCompatActivity {
             editor.apply();
 
             Toast.makeText(getApplicationContext(),"Save successful!",Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(ContactInfoActivity.this, MainActivity.class);
+            startActivity(i);
         }
     };
 

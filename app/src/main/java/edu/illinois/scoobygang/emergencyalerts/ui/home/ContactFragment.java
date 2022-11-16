@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -31,6 +33,7 @@ import edu.illinois.scoobygang.emergencyalerts.ContactAllActivity;
 import edu.illinois.scoobygang.emergencyalerts.ContactInfoActivity;
 import edu.illinois.scoobygang.emergencyalerts.R;
 import edu.illinois.scoobygang.emergencyalerts.data.Contact;
+import edu.illinois.scoobygang.emergencyalerts.data.Message;
 import edu.illinois.scoobygang.emergencyalerts.databinding.FragmentHomeBinding;
 
 
@@ -108,8 +111,8 @@ public class ContactFragment extends Fragment {
             }
             if (filenames != null) {
                 for (String filename : filenames) {
-                    if (!Objects.equals(filename, "contactID.xml")) {
-                        filename = filename.replace(".xml", "");
+                    filename = filename.replace(".xml", "");
+                    if (filename.matches("[0-9]+")) {
                         SharedPreferences contactPrefs = getActivity().getSharedPreferences(filename, MODE_PRIVATE);
                         Contact contact = new Contact();
                         contact.setName(contactPrefs.getString("name", "pizza"));
@@ -121,6 +124,7 @@ public class ContactFragment extends Fragment {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        contacts.sort(new ContactComparator());
         return contacts;
     }
 
@@ -128,5 +132,11 @@ public class ContactFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    static class ContactComparator implements Comparator<Contact> {
+        public int compare(Contact c1, Contact c2) {
+            return c1.getName().compareTo(c2.getName());
+        }
     }
 }

@@ -1,5 +1,6 @@
 package edu.illinois.scoobygang.emergencyalerts;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 
@@ -8,9 +9,12 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import edu.illinois.scoobygang.emergencyalerts.data.Contact;
 import edu.illinois.scoobygang.emergencyalerts.data.Message;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.ClickListener;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageAdapter;

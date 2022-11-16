@@ -3,6 +3,7 @@ package edu.illinois.scoobygang.emergencyalerts;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -14,8 +15,12 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.preference.PreferenceFragmentCompat;
+
+import java.util.Objects;
 
 import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMainBinding;
+import edu.illinois.scoobygang.emergencyalerts.ui.home.ContactFragment;
 
 
 // global variables for contacts and templates
@@ -43,7 +48,6 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_activity_main);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(binding.navView, navController);
-
     }
 
 }

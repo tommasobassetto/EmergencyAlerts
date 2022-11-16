@@ -56,6 +56,7 @@ public class ContactAddActivity extends AppCompatActivity {
                 contactEditor.apply();
 
                 Intent i = new Intent(ContactAddActivity.this, MainActivity.class);
+                i.putExtra("Contact", "true");
                 startActivity(i);
             }
         }
