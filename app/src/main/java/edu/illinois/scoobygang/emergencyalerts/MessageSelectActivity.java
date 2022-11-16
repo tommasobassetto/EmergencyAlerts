@@ -70,8 +70,7 @@ public class MessageSelectActivity extends AppCompatActivity {
         backButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MessageSelectActivity.this, ContactSelectActivity.class);
-                startActivity(i);
+                MessageSelectActivity.super.onBackPressed();
             }
         });
 
@@ -79,7 +78,6 @@ public class MessageSelectActivity extends AppCompatActivity {
         forwardButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // FIXME - should pop from stack
                 Intent i = new Intent(MessageSelectActivity.this, MainActivity.class);
                 startActivity(i);
             }

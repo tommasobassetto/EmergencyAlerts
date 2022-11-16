@@ -69,7 +69,8 @@
             android:text="@string/back_string"
             android:textColor="@color/black"
             android:textAllCaps="false"
-            android:backgroundTint="#00000000"/>
+            android:backgroundTint="#00000000"
+            style="@android:style/Widget.Holo.Button.Borderless"/>
         <Button
             android:id="@+id/SelectMessageNextButton"
             android:layout_width="0dp"
