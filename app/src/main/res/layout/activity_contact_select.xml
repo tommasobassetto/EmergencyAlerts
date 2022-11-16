@@ -65,7 +65,7 @@
             android:layout_weight="1"
             android:text="@string/back_string"
             android:textAllCaps="false"
-            android:backgroundTint="#FFD00000"/>
+            android:backgroundTint="#00000000"/>
         <Button
             android:id="@+id/SelectContactNextButton"
             android:layout_width="0dp"
@@ -73,7 +73,7 @@
             android:layout_weight="1"
             android:text="@string/continue_string"
             android:textAllCaps="false"
-            android:backgroundTint="#FF00A000"/>
+            android:backgroundTint="#198CFF"/>
     </LinearLayout>
         </LinearLayout>
     </LinearLayout>
