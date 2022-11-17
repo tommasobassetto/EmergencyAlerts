@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -50,10 +51,10 @@ public class DashboardFragment extends Fragment {
         View root = binding.getRoot();
 
         // attach listeners to buttons
-        Button sendAlertActivity = binding.sendAlertButton;
+        ImageButton sendAlertActivity = binding.sendAlertButton;
         sendAlertActivity.setOnClickListener(this.sendAlertClicked);
 
-        Button settingsActivity = binding.settingsButton;
+        ImageButton settingsActivity = binding.settingsButton;
         settingsActivity.setOnClickListener(this.settingsClicked);
 
         return root;

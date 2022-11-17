@@ -6,24 +6,11 @@
     android:layout_height="match_parent"
     tools:context=".ui.dashboard.DashboardFragment">
 
-    <Button
-        android:id="@+id/send_alert_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/send_alert_text"
-        android:textAlignment="center"
-        android:layout_margin="100dp"
-        android:layout_marginTop="168dp"
-        android:backgroundTint="#FFE60000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
-    <Button
+    <!--<Button
         android:id="@+id/settings_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:layout_marginRight="30dp"
         android:backgroundTint="#2196F3"
         android:contentDescription="@string/settings"
@@ -31,8 +18,75 @@
         app:icon="@drawable/ic_baseline_settings_24"
         app:iconGravity="textStart"
         app:iconPadding="2dp"
-        android:layout_marginTop="20dp"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent" />-->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal"
+            android:layout_weight="0.02"
+            android:paddingTop="15dp">
+
+            <View android:id="@+id/strut"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="0.33"
+                android:layout_centerHorizontal="true"/>
+
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="0dp"
+                android:layout_height="43dp"
+                android:layout_weight="0.33"
+                android:scaleType="fitCenter"
+                app:srcCompat="@drawable/app_logo" />
+
+            <ImageButton
+                android:id="@+id/settings_button"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_weight="0.33"
+                android:background="@color/white"
+                android:layout_gravity="right"
+                android:scaleType="fitEnd"
+                android:paddingRight="20dp"
+                android:src="@drawable/ic_baseline_settings_24" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="?android:attr/listDivider"
+            android:backgroundTint="@color/black" />
+
+        <ImageButton
+            android:id="@+id/send_alert_button"
+            android:layout_width="258dp"
+            android:layout_height="220dp"
+            android:gravity="center"
+            android:padding="0dp"
+            android:scaleType="fitCenter"
+            android:background="@color/white"
+            android:src="@drawable/send_alert_big"
+            android:text="@string/send_alert_text"
+            android:layout_weight="0.63"
+            />
+
+        <View android:id="@+id/strut2"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="0.33"
+            android:layout_centerHorizontal="true"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
