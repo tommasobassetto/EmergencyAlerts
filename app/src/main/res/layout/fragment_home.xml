@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -11,49 +12,44 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <LinearLayout
+        <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_height="?attr/actionBarSize">
 
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="5"/>
+            <SearchView
+                android:id="@+id/contact_searchbar"
+                android:layout_width="fill_parent"
+                android:layout_height="match_parent"
+                android:iconifiedByDefault="false"
+                android:layout_marginEnd="50dp"/>
 
-            <Button
-                android:id="@+id/add_contact"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add"
-                android:layout_weight="1"/>
+        </androidx.appcompat.widget.Toolbar>
 
-        </LinearLayout>
-
-        <!--        <androidx.appcompat.widget.Toolbar-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="match_parent">-->
-
-        <!--            <SearchView-->
-        <!--                android:layout_width=""-->
-        <!--                android:layout_height=""/>-->
-
-        <!--        </androidx.appcompat.widget.Toolbar>-->
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="30dp"
-            android:text="My Contacts"
-            android:textSize="32sp"
-            android:gravity="center"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/contacts_recycler"
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="20dp"/>
+            android:orientation="vertical">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/contacts_recycler"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="20dp"/>
+
+        </FrameLayout>
 
     </LinearLayout>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="64dp"
+        android:src="@drawable/ic_baseline_post_add_24"
+        app:fabSize="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -7,10 +7,14 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -19,6 +23,8 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -42,9 +48,10 @@ public class ContactFragment extends Fragment {
     private RecyclerView recyclerView;
     private FragmentHomeBinding binding;
     private ClickListener listener;
-    private Button add;
+    private FloatingActionButton add;
+    private SearchView search;
 
-    List<Contact> list;
+    List<Contact> contacts;
 
 //    @Override
 //    public void onBackPressed()
@@ -64,7 +71,7 @@ public class ContactFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        list = getData();
+        contacts = getData();
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,18 +83,38 @@ public class ContactFragment extends Fragment {
             @Override
             public void click(int index){
                 Intent i = new Intent(getActivity(), ContactInfoActivity.class);
-                i.putExtra("CONTACT_ID", list.get(index).getContactID());
+                i.putExtra("CONTACT_ID", contacts.get(index).getContactID());
                 startActivity(i);
             }
         };
 
         recyclerView = root.findViewById(R.id.contacts_recycler);
-        adapter = new ContactAdapter(list, listener);
+        adapter = new ContactAdapter(contacts, listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
+        // getting search view of our item.
+        search = root.findViewById(R.id.contact_searchbar);
+
+        // below line is to call set on query text listener method.
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                filter(query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // inside on query text change method we are
+                // calling a method to filter our recycler view.
+                filter(newText);
+                return false;
+            }
+        });
+
         add = root.findViewById(R.id.add_contact);
-        add.setOnClickListener(this.addClicked);
+        add.setOnClickListener(addClicked);
 
 //        Toolbar toolbar = binding.messageToolbar;
 //        toolbar.setTitle("");
@@ -96,6 +123,31 @@ public class ContactFragment extends Fragment {
 //        final TextView textView = binding.MessagesViewModel;
 //        MessagesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
+    }
+
+    private void filter(String text) {
+        // creating a new array list to filter our data.
+        ArrayList<Contact> filteredlist = new ArrayList<>();
+
+        // running a for loop to compare elements.
+        for (Contact contact : contacts) {
+            // checking if the entered string matched with any item of our recycler view.
+            if (contact.getName().toLowerCase().contains(text.toLowerCase())) {
+                // if the item is matched we are
+                // adding it to our filtered list.
+                filteredlist.add(contact);
+            }
+        }
+//        if (filteredlist.isEmpty()) {
+//            // if no item is added in filtered list we are
+//            // displaying a toast message as no data found.
+//            Toast.makeText(getActivity(), "No Data Found..", Toast.LENGTH_SHORT).show();
+//        } else {
+//            // at last we are passing that filtered
+//            // list to our adapter class.
+//            adapter.filterList(filteredlist);
+//        }
+        adapter.filterList(filteredlist);
     }
 
     // Sample data for RecyclerView
@@ -136,7 +188,9 @@ public class ContactFragment extends Fragment {
 
     static class ContactComparator implements Comparator<Contact> {
         public int compare(Contact c1, Contact c2) {
-            return c1.getName().compareTo(c2.getName());
+            String n1 = c1.getName().toLowerCase();
+            String n2 = c2.getName().toLowerCase();
+            return n1.compareTo(n2);
         }
     }
 }

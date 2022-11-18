@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -16,15 +17,14 @@ import edu.illinois.scoobygang.emergencyalerts.data.Contact;
 
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder>{
-    List<Contact> list = Collections.emptyList();
+    List<Contact> contacts = Collections.emptyList();
 
 //    Context context;
     ClickListener listener;
 
     public ContactAdapter(List<Contact> list, ClickListener listener)
     {
-        this.list = list;
-//        this.context = context;
+        this.contacts = list;
         this.listener = listener;
     }
 
@@ -39,10 +39,20 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder>{
         return viewHolder;
     }
 
+    // method for filtering our recyclerview items.
+    public void filterList(ArrayList<Contact> filterlist) {
+        // below line is to add our filtered
+        // list in our course array list.
+        contacts = filterlist;
+        // below line is to notify our adapter
+        // as change in recycler view data.
+        notifyDataSetChanged();
+    }
+
     @Override
     public void onBindViewHolder(final ContactViewHolder viewHolder, final int position) {
         final int index = viewHolder.getAdapterPosition();
-        viewHolder.title.setText(list.get(position).getName());
+        viewHolder.title.setText(contacts.get(position).getName());
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)
@@ -54,7 +64,7 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder>{
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return contacts.size();
     }
 
     @Override
