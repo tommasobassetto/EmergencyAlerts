@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+android:layout_width="match_parent"
+android:layout_height="wrap_content"
+android:layout_margin="8dp"
+android:elevation="8dp"
+android:background="@color/cardview_dark_background"
+app:cardCornerRadius="8dp"
+android:clickable="true"
+android:focusable="true">
 
+<RelativeLayout
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?attr/selectableItemBackground"
-    android:gravity="center_vertical"
-    android:clickable="true"
-    android:focusable="true">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/messageTitle"
-        android:paddingStart="15dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="3dp"
-        android:textColor="@android:color/black"
-        android:textSize="22sp" />
+        android:padding="14dp"
+        android:textSize="24sp"
+        android:gravity="start"/>
 
-</LinearLayout>
+</RelativeLayout>
+
+</androidx.cardview.widget.CardView>
