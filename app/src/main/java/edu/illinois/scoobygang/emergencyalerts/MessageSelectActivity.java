@@ -90,7 +90,6 @@ public class MessageSelectActivity extends AppCompatActivity {
             alert.setNegativeButton("Cancel", (dialog, which) -> Toast.makeText(view.getContext(), "Changes Discarded", Toast.LENGTH_SHORT).show());
 
             alert.setPositiveButton("Send", (dialog, which) -> {
-                // FIXME - send and goto next popup
                 Toast.makeText(this, "Sending Messages...", Toast.LENGTH_LONG).show();
 
                 for (ContactPlatform p: targets) {
