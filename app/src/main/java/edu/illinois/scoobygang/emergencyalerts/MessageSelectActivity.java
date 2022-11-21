@@ -5,13 +5,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.gson.Gson;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -22,10 +27,12 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import edu.illinois.scoobygang.emergencyalerts.data.ContactPlatform;
 import edu.illinois.scoobygang.emergencyalerts.data.Message;
 import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMessageSelectBinding;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.ClickListener;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageAdapter;
+import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageFragment;
 
 public class MessageSelectActivity extends AppCompatActivity {
 
@@ -34,6 +41,8 @@ public class MessageSelectActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     ClickListener listener;
     private Message selectedMessage;
+
+    private List<ContactPlatform> targets;
 
     private SharedPreferences sharedpreferences;
     private static final String SHARED_PREFS = "saved_messages";
@@ -69,9 +78,42 @@ public class MessageSelectActivity extends AppCompatActivity {
 
         Button forwardButton = binding.SelectMessageNextButton;
         forwardButton.setOnClickListener(view -> {
-            Intent i = new Intent(MessageSelectActivity.this, MainActivity.class);
-            startActivity(i);
+            LayoutInflater inflater = getLayoutInflater();
+            View alertLayout = inflater.inflate(R.layout.confirmation_dialog, null);
+
+            AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
+            alert.setTitle("Are you sure you want to send this alert?");
+            // this is set the view from XML inside AlertDialog
+            alert.setView(alertLayout);
+            // disallow cancel of AlertDialog on click of back button and outside touch
+            alert.setCancelable(false);
+            alert.setNegativeButton("Cancel", (dialog, which) -> Toast.makeText(view.getContext(), "Changes Discarded", Toast.LENGTH_SHORT).show());
+
+            alert.setPositiveButton("Send", (dialog, which) -> {
+                // FIXME - send and goto next popup
+                Toast.makeText(this, "Sending Messages...", Toast.LENGTH_LONG).show();
+
+                for (ContactPlatform p: targets) {
+                    p.onSend(null, selectedMessage.getBody());
+                }
+
+                // Bring up popup for confirmation
+                AlertDialog.Builder confirmation = new AlertDialog.Builder(view.getContext());
+                confirmation.setTitle("Your messages have been sent!");
+                confirmation.setPositiveButton("Finish", (dialog2, which2) -> {
+                    Intent i = new Intent(MessageSelectActivity.this, MainActivity.class);
+                    startActivity(i);
+                });
+                AlertDialog popup = confirmation.create();
+                popup.show();
+
+            });
+
+            AlertDialog dialog = alert.create();
+            dialog.show();
         });
+
+        targets = new ArrayList<>();
     }
 
     private ArrayList<Message> getData()
