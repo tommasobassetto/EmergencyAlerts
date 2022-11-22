@@ -52,6 +52,7 @@ public class ContactSelectActivity extends AppCompatActivity {
             @Override
             public void click(int index) {
                 //sendTargets.addAll(list.get(index).getPlatforms());
+                Toast.makeText(ContactSelectActivity.this, "Contact Added!", Toast.LENGTH_LONG).show();
             }
         };
 
@@ -60,6 +61,7 @@ public class ContactSelectActivity extends AppCompatActivity {
         recyclerView.setHasFixedSize(true);
         adapter = new ContactAdapter(list, listener);
         recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(ContactSelectActivity.this));
 
         Button backButton = binding.SelectContactBackButton;
         backButton.setOnClickListener(view -> ContactSelectActivity.super.onBackPressed());

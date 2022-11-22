@@ -1,12 +1,15 @@
 package edu.illinois.scoobygang.emergencyalerts;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,7 +43,7 @@ public class MessageSelectActivity extends AppCompatActivity {
     MessageAdapter adapter;
     RecyclerView recyclerView;
     ClickListener listener;
-    private Message selectedMessage;
+    private int selectedMessage = -1;
 
     private List<ContactPlatform> targets;
 
@@ -61,10 +64,20 @@ public class MessageSelectActivity extends AppCompatActivity {
         list = getData();
 
         listener = new ClickListener() {
+            @SuppressLint("ResourceAsColor")
             @Override
             public void click(int index){
                 if (list.get(index) == null) return;
-                selectedMessage = list.get(index);
+
+                View oldItem = recyclerView.getLayoutManager().findViewByPosition(selectedMessage);
+                if (oldItem != null) {
+                    oldItem.setBackgroundColor(0);
+                }
+
+                // FIXME - mark that template mesg as selected (and deselect others)
+                View item = recyclerView.getLayoutManager().findViewByPosition(index);
+                item.setBackgroundColor(R.color.blue);
+                selectedMessage = index;
             }
         };
 
@@ -93,7 +106,7 @@ public class MessageSelectActivity extends AppCompatActivity {
                 Toast.makeText(this, "Sending Messages...", Toast.LENGTH_LONG).show();
 
                 for (ContactPlatform p: targets) {
-                    p.onSend(null, selectedMessage.getBody());
+                    p.onSend(null, list.get(selectedMessage).getBody());
                 }
 
                 // Bring up popup for confirmation
