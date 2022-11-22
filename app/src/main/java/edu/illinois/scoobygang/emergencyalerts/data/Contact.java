@@ -1,9 +1,10 @@
 package edu.illinois.scoobygang.emergencyalerts.data;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Contact {
+public class Contact implements Serializable {
     private List<ContactPlatform> contactPlatformList;
     private ContactPlatform defaultPlatform;
 
