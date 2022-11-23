@@ -1,23 +1,35 @@
 package edu.illinois.scoobygang.emergencyalerts.data;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
-
 import java.util.ArrayList;
+import java.util.Properties;
 
-public class Email implements ContactPlatform {
+import javax.mail.Message;
+import javax.mail.Session;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
+import javax.mail.PasswordAuthentication;
+import javax.mail.internet.InternetAddress;
+
+
+public class Email extends javax.mail.Authenticator implements ContactPlatform, Runnable {
 
     private final String platformName;
-    private Context context;
+    private final String username;
+    private final String password;
 
-    public Email(Context context) {
-        this.platformName = "email";
-        this.context = context;
+    public Email() {
+        platformName = "email";
+        username = "emergency.alerts.notify@gmail.com";
+        password = "scoobygang123";
     }
 
     @Override
-    public String getPlatformName() { return this.platformName; }
+    public void run() {
+
+    }
+
+    @Override
+    public String getPlatformName() { return platformName; }
 
     @Override
     public void onSend(Login info, String message) {
@@ -27,26 +39,38 @@ public class Email implements ContactPlatform {
     @Override
     public void send(ArrayList<Contact> contacts, String msg) {
         String subject = "Emergency Alerts Notification";
-        String[] emails = new String[contacts.size()];
+        InternetAddress[] recipients = new InternetAddress[contacts.size()];
         for (int i = 0; i < contacts.size(); ++i) {
             try {
-                emails[i] = contacts.get(i).getEmailAddress();
+                recipients[i] = new InternetAddress(contacts.get(i).getEmailAddress());
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        try {
-            Intent i = new Intent(Intent.ACTION_SENDTO);
-            i.putExtra(Intent.EXTRA_EMAIL, emails);
-            i.putExtra(Intent.EXTRA_SUBJECT, subject);
-            i.putExtra(Intent.EXTRA_TEXT, msg);
-            i.setData(Uri.parse("mailto:"));
 
-            if (i.resolveActivity(context.getPackageManager()) != null) {
-                context.startActivity(i);
+        Properties props = new Properties();
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.host", "smtp.gmail.com");
+        props.put("mail.smtp.port", "587");
+
+        Session session = Session.getInstance(props, new javax.mail.Authenticator() {
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(username, password);
             }
+        });
 
-        } catch (Exception e) {
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress(username));
+            message.setRecipients(Message.RecipientType.TO, recipients);
+            message.setSubject(subject);
+            message.setText(msg);
+
+            EmailThread helper = new EmailThread(message);
+            new Thread(helper).start();
+        } catch (MessagingException e) {
             e.printStackTrace();
         }
     }
