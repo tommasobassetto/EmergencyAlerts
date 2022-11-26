@@ -36,7 +36,7 @@ public class ContactSelectActivity extends AppCompatActivity {
     private ActivityContactSelectBinding binding;
     private ContactAdapter adapter;
     private RecyclerView recyclerView;
-    private ClickListener listener;
+    ClickListener listener;
     private List<ContactPlatform> sendTargets;
 
     @Override
@@ -56,9 +56,7 @@ public class ContactSelectActivity extends AppCompatActivity {
             }
         };
 
-        recyclerView = findViewById(R.id.contacts_recycler);
-        recyclerView.setLayoutManager(new LinearLayoutManager(ContactSelectActivity.this));
-        recyclerView.setHasFixedSize(true);
+        recyclerView = findViewById(R.id.contacts_select_recycler);
         adapter = new ContactAdapter(list, listener);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(ContactSelectActivity.this));
@@ -71,6 +69,8 @@ public class ContactSelectActivity extends AppCompatActivity {
             Intent i = new Intent(ContactSelectActivity.this, MessageSelectActivity.class);
             startActivity(i);
         });
+
+        // FIXME - Select/deselect all
     }
     private List<Contact> getData()
     {

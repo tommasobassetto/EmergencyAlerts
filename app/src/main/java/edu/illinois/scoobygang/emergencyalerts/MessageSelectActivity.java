@@ -25,11 +25,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import edu.illinois.scoobygang.emergencyalerts.data.Contact;
 import edu.illinois.scoobygang.emergencyalerts.data.ContactPlatform;
 import edu.illinois.scoobygang.emergencyalerts.data.Message;
 import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMessageSelectBinding;
@@ -55,10 +57,21 @@ public class MessageSelectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        targets = new ArrayList<>();
+
         binding = ActivityMessageSelectBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         sharedpreferences = getApplicationContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
+
+        // FIXME - Pass selected contacts instead of sending to all
+        List<Contact> temp;
+        temp = getData2();
+
+        for (Contact c: temp) {
+            targets.addAll(c.getPlatforms());
+        }
+
 
         List<Message> list;
         list = getData();
@@ -74,7 +87,6 @@ public class MessageSelectActivity extends AppCompatActivity {
                     oldItem.setBackgroundColor(0);
                 }
 
-                // FIXME - mark that template mesg as selected (and deselect others)
                 View item = recyclerView.getLayoutManager().findViewByPosition(index);
                 item.setBackgroundColor(R.color.blue);
                 selectedMessage = index;
@@ -106,7 +118,7 @@ public class MessageSelectActivity extends AppCompatActivity {
                 Toast.makeText(this, "Sending Messages...", Toast.LENGTH_LONG).show();
 
                 for (ContactPlatform p: targets) {
-                    p.onSend(null, list.get(selectedMessage).getBody());
+                    p.send((ArrayList<Contact>) temp, list.get(selectedMessage).getBody());
                 }
 
                 // Bring up popup for confirmation
@@ -153,6 +165,36 @@ public class MessageSelectActivity extends AppCompatActivity {
 
         return list;
     }
+
+    // FIXME - Comment this out when no longer needed
+    private List<Contact> getData2()
+    {
+        List<Contact> contacts = new ArrayList<>();
+
+        String[] filenames = null;
+        try {
+            File sharedPrefsDir = new File(this.getApplicationInfo().dataDir,"shared_prefs");
+            if (sharedPrefsDir.exists() && sharedPrefsDir.isDirectory()) {
+                filenames = sharedPrefsDir.list();
+            }
+            if (filenames != null) {
+                for (String filename : filenames) {
+                    filename = filename.replace(".xml", "");
+                    if (filename.matches("[0-9]+")) {
+                        SharedPreferences contactPrefs = this.getSharedPreferences(filename, MODE_PRIVATE);
+                        Contact contact = new Contact();
+                        contact.setName(contactPrefs.getString("name", "pizza"));
+                        contact.setContactID(contactPrefs.getString("contactID", "pie"));
+                        contacts.add(contact);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return contacts;
+    }
+
     static class MessageComparator implements Comparator<Message> {
         public int compare(Message msg1, Message msg2) {
             return msg1.getTitle().compareTo(msg2.getTitle());
