@@ -1,12 +1,15 @@
 package edu.illinois.scoobygang.emergencyalerts.ui.notifications;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -26,16 +29,15 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder>{
         this.listener = listener;
     }
 
+    @NonNull
     @Override
-    public MessageViewHolder
-    onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
 
         View itemView = inflater.inflate(R.layout.item_message, parent, false);
 
-        MessageViewHolder viewHolder = new MessageViewHolder(itemView);
-        return viewHolder;
+        return new MessageViewHolder(itemView);
     }
 
     @Override
@@ -58,7 +60,13 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageViewHolder>{
     }
 
     @Override
-    public void onAttachedToRecyclerView(RecyclerView recyclerView) {
+    public void onAttachedToRecyclerView(@NonNull RecyclerView recyclerView) {
         super.onAttachedToRecyclerView(recyclerView);
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void update(ArrayList<Message> newList) {
+        list = newList;
+        notifyDataSetChanged();
     }
 }
