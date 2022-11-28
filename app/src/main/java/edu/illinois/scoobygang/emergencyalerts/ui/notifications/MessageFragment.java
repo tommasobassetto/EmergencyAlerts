@@ -51,6 +51,7 @@ public class MessageFragment extends Fragment {
     private FragmentMessageBinding binding;
     private ClickListener listener;
     private ArrayList<Message> templateList;
+    private String currSearchKey = null;
 
     // variables for data storing
     private static final String SHARED_PREFS = "saved_messages";
@@ -89,8 +90,41 @@ public class MessageFragment extends Fragment {
         searchbar = root.findViewById(R.id.message_searchbar);
         searchbar.setQueryHint("Search Message...");
 
+        searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("DEBUG", query);
+                currSearchKey = query;
+                filter(currSearchKey);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String searchKey) {
+                Log.d("DEBUG", searchKey);
+                currSearchKey = searchKey;
+                filter(currSearchKey);
+
+                return false;
+            }
+        });
+
         return root;
     }
+
+    private void filter(String text) {
+        ArrayList<Message> newList = new ArrayList<>();
+
+        for (Message item : templateList) {
+            if (item.getTitle().toLowerCase().contains(text.toLowerCase())) {
+                newList.add(item);
+            }
+        }
+
+        adapter.update(newList);
+    }
+
 
     // Sample data for RecyclerView
     private ArrayList<Message> getData()
@@ -141,14 +175,20 @@ public class MessageFragment extends Fragment {
             templateList.add(new_template);
             Collections.sort(templateList, new MessageComparator());
 
-            adapter.notifyItemInserted(templateList.size());
-            adapter.notifyItemRangeChanged(0, templateList.size());
+            if (currSearchKey != null && !currSearchKey.equals("")) {
+                filter(currSearchKey);
+            }
+            else {
+                adapter.notifyItemInserted(templateList.size());
+                adapter.notifyItemRangeChanged(0, templateList.size());
+            }
 
             String json_string = new Gson().toJson(templateList);
             saveMessage(json_string);
 
             Toast.makeText(view.getContext(), "Message Saved", Toast.LENGTH_LONG).show();
         });
+
         AlertDialog dialog = alert.create();
         dialog.show();
     }
@@ -159,8 +199,13 @@ public class MessageFragment extends Fragment {
         final TextInputEditText inputTitle = alertLayout.findViewById(R.id.tiet_edit_message_title);
         final TextInputEditText inputBody = alertLayout.findViewById(R.id.tiet_edit_message_body);
 
-        inputTitle.setText(templateList.get(index).getTitle());
-        inputBody.setText(templateList.get(index).getBody());
+        Message msg = adapter.list.get(index);
+
+        inputTitle.setText(msg.getTitle());
+        inputBody.setText(msg.getBody());
+
+        // find the real index (in template list instead of the filtered result)
+        int real_index = templateList.indexOf(msg);
 
         AlertDialog.Builder alert = new AlertDialog.Builder(view.getContext());
         alert.setTitle("Edit Message");
@@ -175,11 +220,16 @@ public class MessageFragment extends Fragment {
             String body = inputBody.getText().toString();
 
             Message new_template = new Message(title, body);
-            templateList.set(index, new_template);
+            templateList.set(real_index, new_template);
             Collections.sort(templateList, new MessageComparator());
 
-            adapter.notifyItemChanged(index);
-            adapter.notifyItemRangeChanged(0, templateList.size());
+            if (currSearchKey != null && !currSearchKey.equals("")) {
+                filter(currSearchKey);
+            }
+            else {
+                adapter.notifyItemChanged(real_index);
+                adapter.notifyItemRangeChanged(0, templateList.size());
+            }
 
             String json_string = new Gson().toJson(templateList);
             saveMessage(json_string);
@@ -188,10 +238,15 @@ public class MessageFragment extends Fragment {
         });
 
         alert.setNeutralButton("Delete", (dialog, which) -> {
-            templateList.remove(index);
+            templateList.remove(real_index);
 
-            adapter.notifyItemRemoved(index);
-            adapter.notifyItemRangeRemoved(index, templateList.size());
+            if (currSearchKey != null && !currSearchKey.equals("")) {
+                filter(currSearchKey);
+            }
+            else {
+                adapter.notifyItemRemoved(real_index);
+                adapter.notifyItemRangeRemoved(real_index, templateList.size());
+            }
 
             String json_string = new Gson().toJson(templateList);
             saveMessage(json_string);
@@ -202,13 +257,6 @@ public class MessageFragment extends Fragment {
         AlertDialog dialog = alert.create();
         dialog.show();
     }
-
-//    @Override
-//    public void onBackPressed()
-//    {
-//        Log.d("Debug", "back press");
-//        super.onBackPressed();
-//    }
 
     private void saveMessage(String msg) {
         Log.d("Debug", "saving message");
