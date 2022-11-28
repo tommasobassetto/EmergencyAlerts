@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -18,6 +19,7 @@ public class ContactAddActivity extends AppCompatActivity {
     Button back, save;
     EditText name, phone, email;
     String nameStr, phoneStr, emailStr;
+    CheckBox email_select, phone_select;
 
     private boolean fieldsValid() {
         if (nameStr.length() == 0) {
@@ -53,6 +55,22 @@ public class ContactAddActivity extends AppCompatActivity {
                 contactEditor.putString("name", nameStr);
                 contactEditor.putString("phone", phoneStr);
                 contactEditor.putString("email", emailStr);
+
+                // save checkbox selections
+                if (email_select.isChecked()) {
+                    contactEditor.putString("email_selected", "Y");
+                }
+                else {
+                    contactEditor.putString("email_selected", "N");
+                }
+
+                if (phone_select.isChecked()) {
+                    contactEditor.putString("phone_selected", "Y");
+                }
+                else {
+                    contactEditor.putString("phone_selected", "N");
+                }
+
                 contactEditor.apply();
 
                 Intent i = new Intent(ContactAddActivity.this, MainActivity.class);
@@ -70,6 +88,20 @@ public class ContactAddActivity extends AppCompatActivity {
         }
     };
 
+    private final View.OnClickListener emailClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            phone_select.setChecked(false);
+        }
+    };
+
+    private final View.OnClickListener phoneClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            email_select.setChecked(false);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,6 +115,12 @@ public class ContactAddActivity extends AppCompatActivity {
 
         save.setOnClickListener(this.saveClicked);
         back.setOnClickListener(this.backClicked);
+
+        email_select = findViewById(R.id.select_email);
+        phone_select = findViewById(R.id.select_phone);
+
+        email_select.setOnClickListener(this.emailClicked);
+        phone_select.setOnClickListener(this.phoneClicked);
     }
 
 
