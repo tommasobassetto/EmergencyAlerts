@@ -39,15 +39,15 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder>{
         return viewHolder;
     }
 
-    // method for filtering our recyclerview items.
-    public void filterList(ArrayList<Contact> filterlist) {
-        // below line is to add our filtered
-        // list in our course array list.
-        contacts = filterlist;
-        // below line is to notify our adapter
-        // as change in recycler view data.
-        notifyDataSetChanged();
-    }
+//    // method for filtering our recyclerview items.
+//    public void filterList(ArrayList<Contact> filterlist) {
+//        // below line is to add our filtered
+//        // list in our course array list.
+//        contacts = filterlist;
+//        // below line is to notify our adapter
+//        // as change in recycler view data.
+//        notifyDataSetChanged();
+//    }
 
     @Override
     public void onBindViewHolder(final ContactViewHolder viewHolder, final int position) {
