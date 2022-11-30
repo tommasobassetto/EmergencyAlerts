@@ -1,6 +1,7 @@
 package edu.illinois.scoobygang.emergencyalerts.ui.home;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -52,7 +53,19 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder>{
     @Override
     public void onBindViewHolder(final ContactViewHolder viewHolder, final int position) {
         final int index = viewHolder.getAdapterPosition();
-        viewHolder.title.setText(contacts.get(position).getName());
+        Contact contact = contacts.get(position);
+
+        // set name of contact
+        viewHolder.title.setText(contact.getName());
+
+        // set defaultPlatform icon
+        String defaultPlatform = contact.getDefaultPlatform();
+        if (defaultPlatform.equals("email")) {
+            viewHolder.icon.setImageResource(R.drawable.ic_baseline_email_24);
+        } else if (defaultPlatform.equals("phone")) {
+            viewHolder.icon.setImageResource(R.drawable.ic_baseline_call_24);
+        }
+
         viewHolder.view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view)

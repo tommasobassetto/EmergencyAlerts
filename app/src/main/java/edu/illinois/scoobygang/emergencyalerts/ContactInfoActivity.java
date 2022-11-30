@@ -22,16 +22,6 @@ public class ContactInfoActivity extends AppCompatActivity {
     Button save, back, delete;
     CheckBox email_select, phone_select;
 
-    private String[] removeWhitespace(String s) {
-        String[] data = new String[2];
-        String v = s.replace(" ", "");
-        v = v.replace("\t", "");
-        v = v.replace("\n", "");
-        data[0] = s;
-        data[1] = v;
-        return data;
-    }
-
     private void deleteSharedPrefsFile(String contactID) {
         String path = getApplicationInfo().dataDir + "/shared_prefs/";
         String filename = contactID + ".xml";
@@ -44,55 +34,58 @@ public class ContactInfoActivity extends AppCompatActivity {
         }
     }
 
+    private boolean fieldsValid() {
+        if (nameView.getText().toString().trim().length() == 0) {
+            nameView.setError("This field is required");
+            Toast.makeText(this, "Add a contact name", Toast.LENGTH_SHORT).show();
+            return false;
+        } if (emailView.getText().toString().trim().length() == 0 && phoneView.getText().toString().trim().length() == 0) {
+            Toast.makeText(this, "Add at least one means of contact", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
+    }
+
+    private boolean defaultValid() {
+        if (email_select.isChecked() || phone_select.isChecked()) {
+            return true;
+        } else {
+            Toast.makeText(this, "Please select a default communication method by selecting a checkbox", Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
+
     private final View.OnClickListener saveClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
-            // open editor to contact's preferences file
-            SharedPreferences contact = getSharedPreferences(contactID, MODE_PRIVATE);
-            SharedPreferences.Editor editor = contact.edit();
+            if (fieldsValid() && defaultValid()) {
+                // open editor to contact's preferences file
+                SharedPreferences contact = getSharedPreferences(contactID, MODE_PRIVATE);
+                SharedPreferences.Editor contactEditor = contact.edit();
 
-            // read data from text views
-            String[] name = removeWhitespace(nameView.getText().toString());
-            String[] phone = removeWhitespace(phoneView.getText().toString());
-            String[] email = removeWhitespace(emailView.getText().toString());
+                // read data from text views
+                String name = nameView.getText().toString().trim();
+                String phone = phoneView.getText().toString().trim();
+                String email = emailView.getText().toString().trim();
 
-            // save contact info
-            if (name[1].equals("")) {
-                editor.putString("name", name[1]);
-            } else {
-                editor.putString("name", name[0]);
-            }
-            if (phone[1].equals("")) {
-                editor.putString("phone", phone[1]);
-            } else {
-                editor.putString("phone", phone[0]);
-            }
-            if (email[1].equals("")) {
-                editor.putString("email", email[1]);
-            } else {
-                editor.putString("email", email[0]);
-            }
+                // save contact info
+                contactEditor.putString("name", name);
+                contactEditor.putString("phone", phone);
+                contactEditor.putString("email", email);
 
-            // save checkbox selections
-            if (email_select.isChecked()) {
-                editor.putString("email_selected", "Y");
-            }
-            else {
-                editor.putString("email_selected", "N");
-            }
+                // save checkbox selections
+                if (email_select.isChecked()) {
+                    contactEditor.putString("default", "email");
+                } else if (phone_select.isChecked()) {
+                    contactEditor.putString("default", "phone");
+                }
 
-            if (phone_select.isChecked()) {
-                editor.putString("phone_selected", "Y");
-            }
-            else {
-                editor.putString("phone_selected", "N");
-            }
+                contactEditor.apply();
 
-            editor.apply();
-
-            Toast.makeText(getApplicationContext(),"Save successful!",Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(ContactInfoActivity.this, MainActivity.class);
-            startActivity(i);
+                Toast.makeText(getApplicationContext(),"Save successful!",Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(ContactInfoActivity.this, MainActivity.class);
+                startActivity(i);
+            }
         }
     };
 
@@ -167,8 +160,7 @@ public class ContactInfoActivity extends AppCompatActivity {
         phone = contact.getString("phone", "");
         email = contact.getString("email", "");
 
-        String email_selected = contact.getString("email_selected", "");
-        String phone_selected = contact.getString("phone_selected", "");
+        String defaultPlatform = contact.getString("default", "");
 
         // populate text fields
         if (!Objects.equals(name, "")) {
@@ -182,10 +174,9 @@ public class ContactInfoActivity extends AppCompatActivity {
         }
 
         // populate checkbox selections
-        if (Objects.equals(email_selected, "Y")) {
+        if (Objects.equals(defaultPlatform, "email")) {
             email_select.setChecked(true);
-        }
-        if (Objects.equals(phone_selected, "Y")) {
+        } else if (Objects.equals(defaultPlatform, "phone")) {
             phone_select.setChecked(true);
         }
     }

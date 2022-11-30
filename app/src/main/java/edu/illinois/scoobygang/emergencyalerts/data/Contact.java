@@ -6,9 +6,7 @@ import java.util.List;
 
 public class Contact implements Serializable {
     private List<ContactPlatform> contactPlatformList;
-    private ContactPlatform defaultPlatform;
-
-    private String name, phoneNumber, emailAddress, contactID;
+    private String name, defaultPlatform, phoneNumber, emailAddress, contactID;
 
     public Contact() {
         this.contactPlatformList = new ArrayList<>();
@@ -27,13 +25,6 @@ public class Contact implements Serializable {
         return contactPlatformList;
     }
 
-    public ContactPlatform getDefaultPlatform() {
-        return defaultPlatform;
-    }
-
-    public void setDefaultPlatform(ContactPlatform platform) {
-        defaultPlatform = platform;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -41,9 +32,15 @@ public class Contact implements Serializable {
     public void setContactID(String contactID) { this.contactID = contactID; }
     public void setPhoneNumber(String phoneNumber) { this.phoneNumber = phoneNumber; }
     public void setEmailAddress (String emailAddress) { this.emailAddress = emailAddress; }
+    public void setDefaultPlatform(String platform) {
+        defaultPlatform = platform;
+    }
 
     public String getName() { return this.name; }
     public String getContactID() { return this.contactID; }
     public String getPhoneNumber() { return this.phoneNumber; }
     public String getEmailAddress() { return this.emailAddress; }
+    public String getDefaultPlatform() {
+        return defaultPlatform;
+    }
 }

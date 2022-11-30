@@ -32,6 +32,15 @@ public class ContactAddActivity extends AppCompatActivity {
         return true;
     }
 
+    private boolean defaultValid() {
+        if (email_select.isChecked() || phone_select.isChecked()) {
+            return true;
+        } else {
+            Toast.makeText(this, "Please select a default communication method by selecting a checkbox", Toast.LENGTH_LONG).show();
+            return false;
+        }
+    }
+
     private final View.OnClickListener saveClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
@@ -40,7 +49,7 @@ public class ContactAddActivity extends AppCompatActivity {
             phoneStr = phone.getText().toString().trim();
             emailStr = email.getText().toString().trim();
 
-            if (fieldsValid()) {
+            if (fieldsValid() && defaultValid()) {
                 SharedPreferences contactIdPrefs = getSharedPreferences("contactID", MODE_PRIVATE);
                 SharedPreferences.Editor contactIDEditor = contactIdPrefs.edit();
 
@@ -58,17 +67,9 @@ public class ContactAddActivity extends AppCompatActivity {
 
                 // save checkbox selections
                 if (email_select.isChecked()) {
-                    contactEditor.putString("email_selected", "Y");
-                }
-                else {
-                    contactEditor.putString("email_selected", "N");
-                }
-
-                if (phone_select.isChecked()) {
-                    contactEditor.putString("phone_selected", "Y");
-                }
-                else {
-                    contactEditor.putString("phone_selected", "N");
+                    contactEditor.putString("default", "email");
+                } else if (phone_select.isChecked()) {
+                    contactEditor.putString("default", "phone");
                 }
 
                 contactEditor.apply();

@@ -26,15 +26,7 @@
       <Space
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:layout_weight="3"/>
-
-      <Button
-          android:id="@+id/save"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:text="@string/save_string"
-          android:layout_weight="1"
-          android:layout_gravity="start"/>
+          android:layout_weight="4"/>
 
     </LinearLayout>
 
@@ -54,33 +46,26 @@
         android:orientation="vertical"
         android:layout_gravity="center_horizontal">
 
-      <EditText
-          android:id="@+id/name"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_margin="10dp"
-          android:inputType="textPersonName"
-          android:hint="Name"/>
-
       <LinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:orientation="horizontal">
 
-        <EditText
-            android:id="@+id/phone"
+        <ImageView
             android:layout_width="0dp"
-            android:layout_weight="9"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_baseline_person_24">
+        </ImageView>
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:inputType="text|phone"
-            android:hint="Phone number"/>
-
-        <CheckBox
-            android:id="@+id/select_phone"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"/>
+            android:layout_weight="9"
+            android:inputType="textPersonName"
+            android:hint="Name"/>
 
       </LinearLayout>
 
@@ -89,11 +74,47 @@
           android:layout_height="wrap_content"
           android:orientation="horizontal">
 
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_baseline_call_24">
+        </ImageView>
+
+        <EditText
+            android:id="@+id/phone"
+            android:layout_width="0dp"
+            android:layout_weight="8"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:inputType="text|phone"
+            android:hint="Phone number"/>
+
+        <CheckBox
+            android:id="@+id/select_phone"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+      </LinearLayout>
+
+      <LinearLayout
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:src="@drawable/ic_baseline_email_24">
+        </ImageView>
+
         <EditText
             android:id="@+id/email"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="9"
+            android:layout_weight="8"
             android:layout_margin="10dp"
             android:inputType="textEmailAddress"
             android:hint="Email address"/>
@@ -101,7 +122,7 @@
         <CheckBox
             android:id="@+id/select_email"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"/>
 
       </LinearLayout>
@@ -112,6 +133,13 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/save"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/save_string"
+        android:gravity="center"/>
 
     <Button
         android:id="@+id/delete"

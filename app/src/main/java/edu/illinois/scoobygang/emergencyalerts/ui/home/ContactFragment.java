@@ -71,7 +71,6 @@ public class ContactFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         contacts = getData();
     }
 
@@ -96,7 +95,7 @@ public class ContactFragment extends Fragment {
 
         // getting search view of our item.
         search = root.findViewById(R.id.contact_searchbar);
-        search.setQueryHint("Search Contact...");
+        search.setQueryHint("Search contacts...");
 
         // below line is to call set on query text listener method.
 //        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -171,6 +170,7 @@ public class ContactFragment extends Fragment {
                         Contact contact = new Contact();
                         contact.setName(contactPrefs.getString("name", "pizza"));
                         contact.setContactID(contactPrefs.getString("contactID", "pie"));
+                        contact.setDefaultPlatform(contactPrefs.getString("default", "toast"));
                         contacts.add(contact);
                     }
                 }

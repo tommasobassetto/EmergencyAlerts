@@ -88,7 +88,7 @@ public class MessageFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
 
         searchbar = root.findViewById(R.id.message_searchbar);
-        searchbar.setQueryHint("Search Message...");
+        searchbar.setQueryHint("Search messages...");
 
         searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
