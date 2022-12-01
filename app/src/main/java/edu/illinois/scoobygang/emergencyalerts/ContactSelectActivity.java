@@ -39,6 +39,14 @@ public class ContactSelectActivity extends AppCompatActivity {
     ClickListener listener;
     private List<ContactPlatform> sendTargets;
 
+    static class ContactComparator implements Comparator<Contact> {
+        public int compare(Contact c1, Contact c2) {
+            String n1 = c1.getName().toLowerCase();
+            String n2 = c2.getName().toLowerCase();
+            return n1.compareTo(n2);
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,6 +80,7 @@ public class ContactSelectActivity extends AppCompatActivity {
 
         // FIXME - Select/deselect all
     }
+    // Sample data for RecyclerView
     private List<Contact> getData()
     {
         List<Contact> contacts = new ArrayList<>();
@@ -90,6 +99,7 @@ public class ContactSelectActivity extends AppCompatActivity {
                         Contact contact = new Contact();
                         contact.setName(contactPrefs.getString("name", "pizza"));
                         contact.setContactID(contactPrefs.getString("contactID", "pie"));
+                        contact.setDefaultPlatform(contactPrefs.getString("default", "toast"));
                         contacts.add(contact);
                     }
                 }
@@ -99,12 +109,6 @@ public class ContactSelectActivity extends AppCompatActivity {
         }
         contacts.sort(new ContactComparator());
         return contacts;
-    }
-
-    static class ContactComparator implements Comparator<Contact> {
-        public int compare(Contact c1, Contact c2) {
-            return c1.getName().compareTo(c2.getName());
-        }
     }
 
 }
