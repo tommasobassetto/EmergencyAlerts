@@ -114,6 +114,8 @@ public class ContactInfoActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             phone_select.setChecked(false);
+            phone_select.setText("");
+            email_select.setText("Default");
         }
     };
 
@@ -121,6 +123,8 @@ public class ContactInfoActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             email_select.setChecked(false);
+            email_select.setText("");
+            phone_select.setText("Default");
         }
     };
 
@@ -176,8 +180,10 @@ public class ContactInfoActivity extends AppCompatActivity {
         // populate checkbox selections
         if (Objects.equals(defaultPlatform, "email")) {
             email_select.setChecked(true);
+            email_select.setText("Default");
         } else if (Objects.equals(defaultPlatform, "phone")) {
             phone_select.setChecked(true);
+            phone_select.setText("Default");
         }
     }
 }
