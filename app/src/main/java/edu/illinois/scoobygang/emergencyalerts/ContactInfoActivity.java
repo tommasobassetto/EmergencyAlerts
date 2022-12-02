@@ -91,6 +91,9 @@ public class ContactInfoActivity extends AppCompatActivity {
                 contactEditor.apply();
 
                 Toast.makeText(getApplicationContext(),"Save successful!",Toast.LENGTH_SHORT).show();
+
+                Intent i = new Intent(ContactInfoActivity.this, MainActivity.class);
+                startActivity(i);
             }
         }
     };
@@ -103,6 +106,9 @@ public class ContactInfoActivity extends AppCompatActivity {
             deleteSharedPrefsFile(contactID);
 
             Toast.makeText(getApplicationContext(),"Deleted contact",Toast.LENGTH_SHORT).show();
+
+            Intent i = new Intent(ContactInfoActivity.this, MainActivity.class);
+            startActivity(i);
         }
     };
 
