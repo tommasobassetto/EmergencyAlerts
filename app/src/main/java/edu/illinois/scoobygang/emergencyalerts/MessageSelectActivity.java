@@ -105,8 +105,8 @@ public class MessageSelectActivity extends AppCompatActivity {
 
                 ContactPlatform e = new Email();
                 ContactPlatform t = new Text("text");
-                //e.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
-                //t.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
+                e.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
+                t.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
 
                 // Bring up popup for confirmation
                 AlertDialog.Builder confirmation = new AlertDialog.Builder(view.getContext());

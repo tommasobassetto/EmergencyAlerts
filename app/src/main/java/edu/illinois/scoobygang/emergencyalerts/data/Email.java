@@ -1,6 +1,7 @@
 package edu.illinois.scoobygang.emergencyalerts.data;
 
 import android.content.Context;
+import android.os.Trace;
 
 import java.util.ArrayList;
 import java.util.Properties;
@@ -8,6 +9,7 @@ import java.util.Properties;
 import javax.mail.Message;
 import javax.mail.Session;
 import javax.mail.MessagingException;
+import javax.mail.Transport;
 import javax.mail.internet.MimeMessage;
 import javax.mail.PasswordAuthentication;
 import javax.mail.internet.InternetAddress;
@@ -70,6 +72,7 @@ public class Email extends javax.mail.Authenticator implements ContactPlatform, 
             message.setSubject(subject);
             message.setText(msg);
 
+            //Transport.send(message);
             EmailThread helper = new EmailThread(message);
             new Thread(helper).start();
         } catch (MessagingException e) {
