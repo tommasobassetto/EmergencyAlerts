@@ -4,12 +4,10 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -18,26 +16,23 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.android.material.textfield.TextInputEditText;
-import com.google.gson.Gson;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
 import edu.illinois.scoobygang.emergencyalerts.data.Contact;
 import edu.illinois.scoobygang.emergencyalerts.data.ContactPlatform;
+import edu.illinois.scoobygang.emergencyalerts.data.Email;
 import edu.illinois.scoobygang.emergencyalerts.data.Message;
+import edu.illinois.scoobygang.emergencyalerts.data.Text;
 import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMessageSelectBinding;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.ClickListener;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageAdapter;
-import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageFragment;
 
 public class MessageSelectActivity extends AppCompatActivity {
 
@@ -47,8 +42,6 @@ public class MessageSelectActivity extends AppCompatActivity {
     ClickListener listener;
     private int selectedMessage = -1;
 
-    private List<ContactPlatform> targets;
-
     private SharedPreferences sharedpreferences;
     private static final String SHARED_PREFS = "saved_messages";
     private static final String MESSAGE_KEY = "messages_json";
@@ -57,21 +50,14 @@ public class MessageSelectActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        targets = new ArrayList<>();
-
         binding = ActivityMessageSelectBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         sharedpreferences = getApplicationContext().getSharedPreferences(SHARED_PREFS, Context.MODE_PRIVATE);
 
         // FIXME - Pass selected contacts instead of sending to all
-        List<Contact> temp;
-        temp = getData2();
-
-        for (Contact c: temp) {
-            targets.addAll(c.getPlatforms());
-        }
-
+        List<Contact> contacts;
+        contacts = getContactData();
 
         List<Message> list;
         list = getData();
@@ -115,11 +101,12 @@ public class MessageSelectActivity extends AppCompatActivity {
             alert.setNegativeButton("Cancel", (dialog, which) -> Toast.makeText(view.getContext(), "Changes Discarded", Toast.LENGTH_SHORT).show());
 
             alert.setPositiveButton("Send", (dialog, which) -> {
-                Toast.makeText(this, "Sending " + targets.size() + " messages...", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Sending " + contacts.size() + " messages...", Toast.LENGTH_LONG).show();
 
-                for (ContactPlatform p: targets) {
-                    p.send(view.getContext(), (ArrayList<Contact>) temp, list.get(selectedMessage).getBody());
-                }
+                ContactPlatform e = new Email();
+                ContactPlatform t = new Text("text");
+                //e.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
+                //t.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
 
                 // Bring up popup for confirmation
                 AlertDialog.Builder confirmation = new AlertDialog.Builder(view.getContext());
@@ -137,11 +124,10 @@ public class MessageSelectActivity extends AppCompatActivity {
             dialog.show();
         });
 
-        targets = new ArrayList<>();
     }
 
     // Sample data for RecyclerView
-    private List<Contact> getData2()
+    private List<Contact> getContactData()
     {
         List<Contact> contacts = new ArrayList<>();
 
@@ -160,6 +146,8 @@ public class MessageSelectActivity extends AppCompatActivity {
                         contact.setName(contactPrefs.getString("name", "pizza"));
                         contact.setContactID(contactPrefs.getString("contactID", "pie"));
                         contact.setDefaultPlatform(contactPrefs.getString("default", "toast"));
+                        contact.setEmailAddress(contactPrefs.getString("email", ""));
+                        contact.setPhoneNumber(contactPrefs.getString("phone", ""));
                         contacts.add(contact);
                     }
                 }
