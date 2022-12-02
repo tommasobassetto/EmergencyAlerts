@@ -151,6 +151,37 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_whatsapp_24">
+                </ImageView>
+
+                <EditText
+                    android:id="@+id/whatsapp"
+                    android:layout_width="0dp"
+                    android:layout_weight="8"
+                    android:layout_height="48dp"
+                    android:layout_margin="10dp"
+                    android:inputType="text|phone"
+                    android:hint="Whatsapp number"/>
+
+                <CheckBox
+                    android:id="@+id/select_whatsapp"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.8"
+                    android:text=""
+                    android:textColor="@color/material_dynamic_neutral50"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <Space

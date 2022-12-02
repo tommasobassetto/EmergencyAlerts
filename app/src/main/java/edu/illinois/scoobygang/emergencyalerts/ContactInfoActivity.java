@@ -28,7 +28,7 @@ public class ContactInfoActivity extends AppCompatActivity {
     String contactID, name, phone, email;
     EditText nameView, phoneView, emailView;
     Button save, back, delete;
-    CheckBox email_select, phone_select;
+    CheckBox email_select, phone_select, whatsapp_select;
 
     private void deleteSharedPrefsFile(String contactID) {
         String path = getApplicationInfo().dataDir + "/shared_prefs/";
@@ -158,6 +158,7 @@ public class ContactInfoActivity extends AppCompatActivity {
 
         email_select = findViewById(R.id.select_email);
         phone_select = findViewById(R.id.select_phone);
+        whatsapp_select = findViewById(R.id.select_whatsapp);
 
         email_select.setOnClickListener(this.emailClicked);
         phone_select.setOnClickListener(this.phoneClicked);

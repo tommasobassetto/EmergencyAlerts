@@ -24,7 +24,8 @@ public class Email extends javax.mail.Authenticator implements ContactPlatform, 
     public Email() {
         platformName = "email";
         username = "emergency.alerts.notify@gmail.com";
-        password = "scoobygang123";
+        password = "wpaoarkwbzvlrogs";
+        //password = "scoobygang123";
     }
 
     @Override
