@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
 
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+
 import java.util.List;
 
 public class WhatsAppService extends AccessibilityService {
@@ -111,14 +113,14 @@ public class WhatsAppService extends AccessibilityService {
         if (contactNameNodes.size() == 0) {
             Log.i(TAG, "contact name not visible");
             return;
-        } else if (contactNameNodes.size() == 1) {
-            if (contactNameNodes.get(0).getText().toString().equals(sContact))
-                Log.i(TAG, "Found " + sContact);
-            else {
-                Log.i(TAG, "Wrong contact " + contactNameNodes.get(0).getText());
-                return;
-            }
-        }
+        } // else if (contactNameNodes.size() == 1) {
+//            if (contactNameNodes.get(0).getText().toString().equals(sContact))
+//                Log.i(TAG, "Found " + sContact);
+//            else {
+//                Log.i(TAG, "Wrong contact " + contactNameNodes.get(0).getText());
+//                return;
+//            }
+//        }
         if (event.getEventType() == AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED) {
             printChildNodes(nodeInfo, "  ");
             List<AccessibilityNodeInfo> entryETNodes = nodeInfo.findAccessibilityNodeInfosByViewId("com.whatsapp:id/entry");
@@ -146,6 +148,16 @@ public class WhatsAppService extends AccessibilityService {
             }
         } else printChildNodes(nodeInfo, "  ");
         nodeInfo.recycle();
+
+        // Now go back to your app by clicking on the Android back button twice:
+        // First one to leave the conversation screen
+        // Second one to leave whatsapp
+        try {
+            Thread.sleep (500); // hack for certain devices in which the immediate back click is too fast to handle
+            performGlobalAction (GLOBAL_ACTION_BACK);
+            Thread.sleep (500);  // same hack as above
+        } catch (InterruptedException ignored) {}
+        performGlobalAction (GLOBAL_ACTION_BACK);
     }
 
     @Override

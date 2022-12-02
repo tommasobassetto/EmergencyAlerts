@@ -27,14 +27,17 @@ import androidx.core.app.ActivityCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import edu.illinois.scoobygang.emergencyalerts.data.Contact;
+
 public class SettingsActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.READ_CONTACTS},1);
 
         if (savedInstanceState == null) {
             getSupportFragmentManager()
@@ -59,6 +62,8 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
+        public Set<Contact> contactSet = new HashSet<>();
+
         @SuppressLint("Range")
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -68,6 +73,8 @@ public class SettingsActivity extends AppCompatActivity {
             Preference phoneContacts = findPreference("phone_contacts");
             assert phoneContacts != null;
             phoneContacts.setOnPreferenceClickListener(preference -> {
+                ActivityCompat.requestPermissions(getActivity(),
+                        new String[]{Manifest.permission.READ_CONTACTS},1);
                 importPhoneContacts();
                 // popup flow.
                 LayoutInflater inflater = (LayoutInflater) getContext()
@@ -90,6 +97,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         @SuppressLint("Range")
         public void importPhoneContacts() {
+            Set<String> names = new HashSet<>();
             ContentResolver cr = getActivity().getContentResolver();
             Cursor cur = cr.query(ContactsContract.Contacts.CONTENT_URI,
                     null, null, null, null);
@@ -111,24 +119,11 @@ public class SettingsActivity extends AppCompatActivity {
                         while (pCur.moveToNext()) {
                             String phoneNo = pCur.getString(pCur.getColumnIndex(
                                     ContactsContract.CommonDataKinds.Phone.NUMBER));
-                            SharedPreferences contactIdPrefs = getActivity()
-                                    .getSharedPreferences("contactID", MODE_PRIVATE);
-                            SharedPreferences.Editor contactIDEditor = contactIdPrefs.edit();
-
-                            int contactID = contactIdPrefs.getInt("count", -1) + 1;
-                            contactIDEditor.putInt("count", contactID);
-                            contactIDEditor.apply();
-                            SharedPreferences contactPrefs = getActivity().
-                                    getSharedPreferences(Integer.toString(contactID), MODE_PRIVATE);
-                            SharedPreferences.Editor contactEditor = contactPrefs.edit();
-                            contactEditor.putString("contactID", Integer.toString(contactID));
-                            contactEditor.putString("name", name);
-                            contactEditor.putString("phone", phoneNo);
-                            contactEditor.putString("email", "");
-                            contactEditor.putString("defaultPlatform", "phone");
-                            contactEditor.apply();
-
-                            // Todo: add phone platform
+                            Contact contact = new Contact();
+                            contact.setPhoneNumber(phoneNo);
+                            contact.setName(name);
+                            contact.setDefaultPlatform("phone");
+                            contactSet.add(contact);
                             Log.i(TAG, "Name: " + name);
                             Log.i(TAG, "Phone Number: " + phoneNo);
                         }
@@ -138,6 +133,28 @@ public class SettingsActivity extends AppCompatActivity {
             }
             if(cur!=null){
                 cur.close();
+            }
+            for (Contact c : contactSet) {
+                if (names.contains(c.getName())) {
+                    continue;
+                }
+                names.add(c.getName());
+                SharedPreferences contactIdPrefs = getActivity()
+                        .getSharedPreferences("contactID", MODE_PRIVATE);
+                SharedPreferences.Editor contactIDEditor = contactIdPrefs.edit();
+
+                int contactID = contactIdPrefs.getInt("count", -1) + 1;
+                contactIDEditor.putInt("count", contactID);
+                contactIDEditor.apply();
+                SharedPreferences contactPrefs = getActivity().
+                        getSharedPreferences(Integer.toString(contactID), MODE_PRIVATE);
+                SharedPreferences.Editor contactEditor = contactPrefs.edit();
+                contactEditor.putString("contactID", Integer.toString(contactID));
+                contactEditor.putString("name", c.getName());
+                contactEditor.putString("phone", c.getPhoneNumber());
+                contactEditor.putString("email", "");
+                contactEditor.putString("defaultPlatform", c.getDefaultPlatform());
+                contactEditor.apply();
             }
         }
 

@@ -22,7 +22,7 @@ public class ContactAddActivity extends AppCompatActivity {
     Button back, save;
     EditText name, phone, email;
     String nameStr, phoneStr, emailStr;
-    CheckBox email_select, phone_select;
+    CheckBox email_select, phone_select, whatsapp_select;
 
     private boolean fieldsValid() {
         if (nameStr.length() == 0) {
@@ -36,7 +36,7 @@ public class ContactAddActivity extends AppCompatActivity {
     }
 
     private boolean defaultValid() {
-        if (email_select.isChecked() || phone_select.isChecked()) {
+        if (email_select.isChecked() || phone_select.isChecked() || whatsapp_select.isChecked()) {
             return true;
         } else {
             Toast.makeText(this, "Please select a default communication platform by selecting a checkbox", Toast.LENGTH_LONG).show();
@@ -97,12 +97,22 @@ public class ContactAddActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             phone_select.setChecked(false);
+            whatsapp_select.setChecked(false);
         }
     };
 
     private final View.OnClickListener phoneClicked = new View.OnClickListener() {
         @Override
         public void onClick(View view) {
+            email_select.setChecked(false);
+            whatsapp_select.setChecked(false);
+        }
+    };
+
+    private final View.OnClickListener whatsappClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            phone_select.setChecked(false);
             email_select.setChecked(false);
         }
     };
@@ -121,9 +131,11 @@ public class ContactAddActivity extends AppCompatActivity {
 
         email_select = findViewById(R.id.select_email);
         phone_select = findViewById(R.id.select_phone);
+        whatsapp_select = findViewById(R.id.select_whatsapp);
 
         email_select.setOnClickListener(this.emailClicked);
         phone_select.setOnClickListener(this.phoneClicked);
+        whatsapp_select.setOnClickListener(this.whatsappClicked);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);

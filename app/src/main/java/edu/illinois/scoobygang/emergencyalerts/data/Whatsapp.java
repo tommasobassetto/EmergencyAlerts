@@ -33,6 +33,10 @@ public class Whatsapp implements ContactPlatform {
         if (autoMsgService == null)
             Toast.makeText(context, "Service is not running", Toast.LENGTH_LONG).show();
         else {
+            autoMsgService.sActive = true;
+            autoMsgService.sContact =contacts.get(0).getName();
+            autoMsgService.sMsg = message;
+
             Uri uri = Uri.parse("smsto:" + contacts.get(0).getPhoneNumber() + "@s.whatsapp.net");
             Intent i = new Intent(Intent.ACTION_SENDTO, uri);
             i.setPackage("com.whatsapp");

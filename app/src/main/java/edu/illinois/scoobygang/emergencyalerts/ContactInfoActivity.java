@@ -55,7 +55,7 @@ public class ContactInfoActivity extends AppCompatActivity {
     }
 
     private boolean defaultValid() {
-        if (email_select.isChecked() || phone_select.isChecked()) {
+        if (email_select.isChecked() || phone_select.isChecked() || whatsapp_select.isChecked()) {
             return true;
         } else {
             Toast.makeText(this, "Please select a default communication method by selecting a checkbox", Toast.LENGTH_LONG).show();
@@ -116,6 +116,8 @@ public class ContactInfoActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             phone_select.setChecked(false);
+            whatsapp_select.setChecked(false);
+
             phone_select.setText("");
             email_select.setText("Default");
         }
@@ -125,8 +127,18 @@ public class ContactInfoActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             email_select.setChecked(false);
+            whatsapp_select.setChecked(false);
             email_select.setText("");
             phone_select.setText("Default");
+        }
+    };
+
+    private final View.OnClickListener whatsappClicked = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            email_select.setChecked(false);
+            email_select.setText("");
+            whatsapp_select.setText("Default");
         }
     };
 
@@ -162,6 +174,7 @@ public class ContactInfoActivity extends AppCompatActivity {
 
         email_select.setOnClickListener(this.emailClicked);
         phone_select.setOnClickListener(this.phoneClicked);
+        whatsapp_select.setOnClickListener(this.whatsappClicked);
 
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);

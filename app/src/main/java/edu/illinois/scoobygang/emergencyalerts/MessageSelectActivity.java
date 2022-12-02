@@ -107,9 +107,19 @@ public class MessageSelectActivity extends AppCompatActivity {
                 ContactPlatform e = new Email();
                 ContactPlatform t = new Text("text");
                 ContactPlatform w = new Whatsapp();
-                e.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
-                t.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
-                w.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
+                try {
+                    e.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
+                } catch (Exception e2) {
+                    // yay
+                } try {
+                    t.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
+                } catch (Exception e3) {
+
+                } try {
+                    w.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
+                } catch (Exception e4) {
+
+                }
                 // Bring up popup for confirmation
                 AlertDialog.Builder confirmation = new AlertDialog.Builder(view.getContext());
                 confirmation.setTitle("Your messages have been sent!");
