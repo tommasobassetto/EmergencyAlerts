@@ -21,7 +21,7 @@ public class Text implements ContactPlatform {
     }
 
     @Override
-    public void send(ArrayList<Contact> contacts, String message) {
+    public void send(Context context, ArrayList<Contact> contacts, String message) {
         SmsManager sms = SmsManager.getDefault();
         for (Contact contact : contacts) {
             try {

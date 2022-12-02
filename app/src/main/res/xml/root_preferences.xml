@@ -1,13 +1,24 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <PreferenceCategory
+        app:key="enable"
+        app:title="Enable Hands-Free Messaging">
+
+        <Preference
+            app:key="enable_auto_send"
+            app:summary="To automatically send messages, you'll need to give the app permission."
+            app:title="Enable or Disable Hands-Free Messaging"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         app:key="upload_contacts"
         app:title="Upload Contacts">
 
         <Preference
             app:key="phone_contacts"
             app:summary="Upload all your phone contacts to the app"
-            app:title="Upload Phone Contacts"/>
+            app:title="Upload All Phone Contacts"/>
 
     </PreferenceCategory>
 

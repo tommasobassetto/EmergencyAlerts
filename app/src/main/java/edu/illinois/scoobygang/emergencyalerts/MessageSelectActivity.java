@@ -118,7 +118,7 @@ public class MessageSelectActivity extends AppCompatActivity {
                 Toast.makeText(this, "Sending Messages...", Toast.LENGTH_LONG).show();
 
                 for (ContactPlatform p: targets) {
-                    p.send((ArrayList<Contact>) temp, list.get(selectedMessage).getBody());
+                    p.send(view.getContext(), (ArrayList<Contact>) temp, list.get(selectedMessage).getBody());
                 }
 
                 // Bring up popup for confirmation

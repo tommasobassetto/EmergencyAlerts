@@ -5,10 +5,12 @@ import static android.content.ContentValues.TAG;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -48,7 +50,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        // enable back press to home screen
+        // enable back press to home screen.
         if (item.getItemId() == android.R.id.home) {
             this.finish();
             return true;
@@ -61,8 +63,9 @@ public class SettingsActivity extends AppCompatActivity {
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.root_preferences, rootKey);
-            Preference phoneContacts = findPreference("phone_contacts");
 
+            // import phone contacts.
+            Preference phoneContacts = findPreference("phone_contacts");
             assert phoneContacts != null;
             phoneContacts.setOnPreferenceClickListener(preference -> {
                 importPhoneContacts();
@@ -75,6 +78,14 @@ public class SettingsActivity extends AppCompatActivity {
                 return true;
             });
 
+            // enable auto-sending for third-party apps.
+            Preference auto_send = findPreference("enable_auto_send");
+            auto_send.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS);
+                startActivity(intent);
+
+                return true;
+            });
         }
 
         @SuppressLint("Range")
@@ -110,11 +121,11 @@ public class SettingsActivity extends AppCompatActivity {
                             SharedPreferences contactPrefs = getActivity().
                                     getSharedPreferences(Integer.toString(contactID), MODE_PRIVATE);
                             SharedPreferences.Editor contactEditor = contactPrefs.edit();
-
                             contactEditor.putString("contactID", Integer.toString(contactID));
                             contactEditor.putString("name", name);
                             contactEditor.putString("phone", phoneNo);
                             contactEditor.putString("email", "");
+                            contactEditor.putString("defaultPlatform", "phone");
                             contactEditor.apply();
 
                             // Todo: add phone platform

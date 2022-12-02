@@ -1,5 +1,7 @@
 package edu.illinois.scoobygang.emergencyalerts.data;
 
+import android.content.Context;
+
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -37,7 +39,7 @@ public class Email extends javax.mail.Authenticator implements ContactPlatform, 
     }
 
     @Override
-    public void send(ArrayList<Contact> contacts, String msg) {
+    public void send(Context context, ArrayList<Contact> contacts, String msg) {
         String subject = "Emergency Alerts Notification";
         InternetAddress[] recipients = new InternetAddress[contacts.size()];
         for (int i = 0; i < contacts.size(); ++i) {
