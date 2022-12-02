@@ -7,16 +7,10 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.SearchView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -29,18 +23,13 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import edu.illinois.scoobygang.emergencyalerts.ContactAddActivity;
-import edu.illinois.scoobygang.emergencyalerts.ContactAllActivity;
 import edu.illinois.scoobygang.emergencyalerts.ContactInfoActivity;
 import edu.illinois.scoobygang.emergencyalerts.R;
 import edu.illinois.scoobygang.emergencyalerts.data.Contact;
-import edu.illinois.scoobygang.emergencyalerts.data.Message;
 import edu.illinois.scoobygang.emergencyalerts.databinding.FragmentHomeBinding;
 
 
@@ -52,13 +41,9 @@ public class ContactFragment extends Fragment {
     private FloatingActionButton add;
     private SearchView search;
 
-    List<Contact> contacts;
+    private List<Contact> contacts;
+    private String currSearchKey = null;
 
-//    @Override
-//    public void onBackPressed()
-//    {
-//        super.onBackPressed();
-//    }
 
     private final View.OnClickListener addClicked = new View.OnClickListener() {
         @Override
@@ -81,9 +66,10 @@ public class ContactFragment extends Fragment {
 
         listener = new ClickListener() {
             @Override
-            public void click(int index){
+            public void click(int index) {
                 Intent i = new Intent(getActivity(), ContactInfoActivity.class);
-                i.putExtra("CONTACT_ID", contacts.get(index).getContactID());
+                Contact contact_info = adapter.contacts.get(index);
+                i.putExtra("CONTACT_ID", contact_info.getContactID());
                 startActivity(i);
             }
         };
@@ -97,59 +83,43 @@ public class ContactFragment extends Fragment {
         search = root.findViewById(R.id.contact_searchbar);
         search.setQueryHint("Search contacts...");
 
-        // below line is to call set on query text listener method.
-//        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                filter(query);
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//                // inside on query text change method we are
-//                // calling a method to filter our recycler view.
-//                filter(newText);
-//                return false;
-//            }
-//        });
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d("DEBUG", query);
+                currSearchKey = query;
+                filter(currSearchKey);
+
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String searchKey) {
+                Log.d("DEBUG", searchKey);
+                currSearchKey = searchKey;
+                filter(currSearchKey);
+
+                return false;
+            }
+        });
 
         add = root.findViewById(R.id.add_contact);
         add.setOnClickListener(addClicked);
 
-//        Toolbar toolbar = binding.messageToolbar;
-//        toolbar.setTitle("");
-//        setSupportActionBar(toolbar);
-
-//        final TextView textView = binding.MessagesViewModel;
-//        MessagesViewModel.getText().observe(getViewLifecycleOwner(), textView::setText);
         return root;
     }
-//
-//    private void filter(String text) {
-//        // creating a new array list to filter our data.
-//        ArrayList<Contact> filteredlist = new ArrayList<>();
-//
-//        // running a for loop to compare elements.
-//        for (Contact contact : contacts) {
-//            // checking if the entered string matched with any item of our recycler view.
-//            if (contact.getName().toLowerCase().contains(text.toLowerCase())) {
-//                // if the item is matched we are
-//                // adding it to our filtered list.
-//                filteredlist.add(contact);
-//            }
-//        }
-////        if (filteredlist.isEmpty()) {
-////            // if no item is added in filtered list we are
-////            // displaying a toast message as no data found.
-////            Toast.makeText(getActivity(), "No Data Found..", Toast.LENGTH_SHORT).show();
-////        } else {
-////            // at last we are passing that filtered
-////            // list to our adapter class.
-////            adapter.filterList(filteredlist);
-////        }
-//        adapter.filterList(filteredlist);
-//    }
+
+    private void filter(String text) {
+        ArrayList<Contact> newList = new ArrayList<>();
+
+        for (Contact item : contacts) {
+            if (item.getName().toLowerCase().contains(text.toLowerCase())) {
+                newList.add(item);
+            }
+        }
+
+        adapter.update(newList);
+    }
 
     // Sample data for RecyclerView
     private List<Contact> getData()

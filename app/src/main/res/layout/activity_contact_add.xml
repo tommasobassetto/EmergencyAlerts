@@ -10,33 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/back_string"
-                android:layout_weight="1"
-                android:layout_gravity="end"/>
-
-            <Space
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="4"/>
-
-        </LinearLayout>
-
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/add_contact_string"
-            android:textSize="24dp"
+            android:layout_marginTop="40dp"
+            android:layout_marginBottom="20dp"
             android:gravity="center"
-            android:layout_margin="40dp"/>
+            android:text="@string/add_contact_string"
+            android:textColor="@color/black"
+            android:textSize="24dp"
+            android:textStyle="bold"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -61,12 +44,49 @@
                 <EditText
                     android:id="@+id/name"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_margin="10dp"
-                    android:layout_weight="9"
+                    android:layout_weight="8"
                     android:inputType="textPersonName"
                     android:hint="Name"/>
 
+                <Space
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="2.6"/>
+
+            </LinearLayout>
+
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="25dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="Platforms">
+                </TextView>
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    android:text="Default"
+                    android:gravity="right"
+                    android:layout_marginRight="8dp">
+                </TextView>
             </LinearLayout>
 
             <LinearLayout
@@ -85,7 +105,7 @@
                     android:id="@+id/phone"
                     android:layout_width="0dp"
                     android:layout_weight="8"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_margin="10dp"
                     android:inputType="text|phone"
                     android:hint="Phone number"/>
@@ -94,7 +114,9 @@
                     android:id="@+id/select_phone"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:layout_weight="2.8"
+                    android:text=""
+                    android:textColor="@color/material_dynamic_neutral50"/>
 
             </LinearLayout>
 
@@ -113,7 +135,7 @@
                 <EditText
                     android:id="@+id/email"
                     android:layout_width="0dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="48dp"
                     android:layout_weight="8"
                     android:layout_margin="10dp"
                     android:inputType="textEmailAddress"
@@ -123,10 +145,11 @@
                     android:id="@+id/select_email"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
-                    android:layout_weight="1"/>
+                    android:layout_weight="2.8"
+                    android:text=""
+                    android:textColor="@color/material_dynamic_neutral50"/>
 
             </LinearLayout>
-
 
         </LinearLayout>
 

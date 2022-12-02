@@ -1,11 +1,16 @@
 package edu.illinois.scoobygang.emergencyalerts;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,6 +19,9 @@ import android.widget.CheckBox;
 
 import java.io.File;
 import java.util.Objects;
+
+import edu.illinois.scoobygang.emergencyalerts.data.Contact;
+import edu.illinois.scoobygang.emergencyalerts.ui.home.ContactFragment;
 
 public class ContactInfoActivity extends AppCompatActivity {
 
@@ -83,6 +91,7 @@ public class ContactInfoActivity extends AppCompatActivity {
                 contactEditor.apply();
 
                 Toast.makeText(getApplicationContext(),"Save successful!",Toast.LENGTH_SHORT).show();
+
                 Intent i = new Intent(ContactInfoActivity.this, MainActivity.class);
                 startActivity(i);
             }
@@ -97,14 +106,7 @@ public class ContactInfoActivity extends AppCompatActivity {
             deleteSharedPrefsFile(contactID);
 
             Toast.makeText(getApplicationContext(),"Deleted contact",Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(ContactInfoActivity.this, MainActivity.class);
-            startActivity(i);
-        }
-    };
 
-    private final View.OnClickListener backClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
             Intent i = new Intent(ContactInfoActivity.this, MainActivity.class);
             startActivity(i);
         }
@@ -114,6 +116,8 @@ public class ContactInfoActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             phone_select.setChecked(false);
+            phone_select.setText("");
+            email_select.setText("Default");
         }
     };
 
@@ -121,8 +125,19 @@ public class ContactInfoActivity extends AppCompatActivity {
         @Override
         public void onClick(View view) {
             email_select.setChecked(false);
+            email_select.setText("");
+            phone_select.setText("Default");
         }
     };
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,11 +151,9 @@ public class ContactInfoActivity extends AppCompatActivity {
         contactID = getIntent().getStringExtra("CONTACT_ID");
 
         save = findViewById(R.id.save);
-        back = findViewById(R.id.back);
         delete = findViewById(R.id.delete);
 
         save.setOnClickListener(this.saveClicked);
-        back.setOnClickListener(this.backClicked);
         delete.setOnClickListener(this.deleteClicked);
 
         email_select = findViewById(R.id.select_email);
@@ -148,6 +161,9 @@ public class ContactInfoActivity extends AppCompatActivity {
 
         email_select.setOnClickListener(this.emailClicked);
         phone_select.setOnClickListener(this.phoneClicked);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -176,8 +192,10 @@ public class ContactInfoActivity extends AppCompatActivity {
         // populate checkbox selections
         if (Objects.equals(defaultPlatform, "email")) {
             email_select.setChecked(true);
+            email_select.setText("Default");
         } else if (Objects.equals(defaultPlatform, "phone")) {
             phone_select.setChecked(true);
+            phone_select.setText("Default");
         }
     }
 }

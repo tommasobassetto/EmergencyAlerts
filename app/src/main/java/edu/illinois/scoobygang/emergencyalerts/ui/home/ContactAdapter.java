@@ -1,5 +1,6 @@
 package edu.illinois.scoobygang.emergencyalerts.ui.home;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -15,6 +16,7 @@ import java.util.List;
 
 import edu.illinois.scoobygang.emergencyalerts.R;
 import edu.illinois.scoobygang.emergencyalerts.data.Contact;
+import edu.illinois.scoobygang.emergencyalerts.data.Message;
 
 
 public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder>{
@@ -40,15 +42,11 @@ public class ContactAdapter extends RecyclerView.Adapter<ContactViewHolder>{
         return viewHolder;
     }
 
-//    // method for filtering our recyclerview items.
-//    public void filterList(ArrayList<Contact> filterlist) {
-//        // below line is to add our filtered
-//        // list in our course array list.
-//        contacts = filterlist;
-//        // below line is to notify our adapter
-//        // as change in recycler view data.
-//        notifyDataSetChanged();
-//    }
+    @SuppressLint("NotifyDataSetChanged")
+    public void update(ArrayList<Contact> newList) {
+        contacts = newList;
+        notifyDataSetChanged();
+    }
 
     @Override
     public void onBindViewHolder(final ContactViewHolder viewHolder, final int position) {

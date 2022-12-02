@@ -1,11 +1,14 @@
 package edu.illinois.scoobygang.emergencyalerts;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -26,7 +29,7 @@ public class ContactAddActivity extends AppCompatActivity {
             name.setError("This field is required");
             return false;
         } if (emailStr.length() == 0 && phoneStr.length() == 0) {
-            Toast.makeText(this, "Add at least one means of contact", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Add at least one platform of contact", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -36,7 +39,7 @@ public class ContactAddActivity extends AppCompatActivity {
         if (email_select.isChecked() || phone_select.isChecked()) {
             return true;
         } else {
-            Toast.makeText(this, "Please select a default communication method by selecting a checkbox", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please select a default communication platform by selecting a checkbox", Toast.LENGTH_LONG).show();
             return false;
         }
     }
@@ -81,13 +84,14 @@ public class ContactAddActivity extends AppCompatActivity {
         }
     };
 
-    private final View.OnClickListener backClicked = new View.OnClickListener() {
-        @Override
-        public void onClick(View view) {
-            Intent i = new Intent(ContactAddActivity.this, MainActivity.class);
-            startActivity(i);
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            this.finish();
+            return true;
         }
-    };
+        return super.onOptionsItemSelected(item);
+    }
 
     private final View.OnClickListener emailClicked = new View.OnClickListener() {
         @Override
@@ -112,16 +116,17 @@ public class ContactAddActivity extends AppCompatActivity {
         phone = findViewById(R.id.phone);
         email = findViewById(R.id.email);
         save = findViewById(R.id.save);
-        back = findViewById(R.id.back);
 
         save.setOnClickListener(this.saveClicked);
-        back.setOnClickListener(this.backClicked);
 
         email_select = findViewById(R.id.select_email);
         phone_select = findViewById(R.id.select_phone);
 
         email_select.setOnClickListener(this.emailClicked);
         phone_select.setOnClickListener(this.phoneClicked);
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
     }
 
 

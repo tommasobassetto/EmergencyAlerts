@@ -21,7 +21,8 @@
             android:layout_height="wrap_content"
             android:padding="14dp"
             android:textSize="24sp"
-            android:gravity="start"/>
+            android:gravity="start"
+            android:textColor="@color/black"/>
 
     </RelativeLayout>
 
