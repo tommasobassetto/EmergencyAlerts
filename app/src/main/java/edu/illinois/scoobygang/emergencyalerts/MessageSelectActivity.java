@@ -30,6 +30,7 @@ import edu.illinois.scoobygang.emergencyalerts.data.ContactPlatform;
 import edu.illinois.scoobygang.emergencyalerts.data.Email;
 import edu.illinois.scoobygang.emergencyalerts.data.Message;
 import edu.illinois.scoobygang.emergencyalerts.data.Text;
+import edu.illinois.scoobygang.emergencyalerts.data.Whatsapp;
 import edu.illinois.scoobygang.emergencyalerts.databinding.ActivityMessageSelectBinding;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.ClickListener;
 import edu.illinois.scoobygang.emergencyalerts.ui.notifications.MessageAdapter;
@@ -105,9 +106,10 @@ public class MessageSelectActivity extends AppCompatActivity {
 
                 ContactPlatform e = new Email();
                 ContactPlatform t = new Text("text");
+                ContactPlatform w = new Whatsapp();
                 e.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
                 t.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
-
+                w.send(view.getContext(), (ArrayList<Contact>) contacts, list.get(selectedMessage).getBody());
                 // Bring up popup for confirmation
                 AlertDialog.Builder confirmation = new AlertDialog.Builder(view.getContext());
                 confirmation.setTitle("Your messages have been sent!");
