@@ -115,7 +115,7 @@ public class MessageSelectActivity extends AppCompatActivity {
             alert.setNegativeButton("Cancel", (dialog, which) -> Toast.makeText(view.getContext(), "Changes Discarded", Toast.LENGTH_SHORT).show());
 
             alert.setPositiveButton("Send", (dialog, which) -> {
-                Toast.makeText(this, "Sending Messages...", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Sending " + targets.size() + " messages...", Toast.LENGTH_LONG).show();
 
                 for (ContactPlatform p: targets) {
                     p.send(view.getContext(), (ArrayList<Contact>) temp, list.get(selectedMessage).getBody());
@@ -138,6 +138,37 @@ public class MessageSelectActivity extends AppCompatActivity {
         });
 
         targets = new ArrayList<>();
+    }
+
+    // Sample data for RecyclerView
+    private List<Contact> getData2()
+    {
+        List<Contact> contacts = new ArrayList<>();
+
+        String[] filenames = null;
+        try {
+            File sharedPrefsDir = new File(this.getApplicationInfo().dataDir,"shared_prefs");
+            if (sharedPrefsDir.exists() && sharedPrefsDir.isDirectory()) {
+                filenames = sharedPrefsDir.list();
+            }
+            if (filenames != null) {
+                for (String filename : filenames) {
+                    filename = filename.replace(".xml", "");
+                    if (filename.matches("[0-9]+")) {
+                        SharedPreferences contactPrefs = this.getSharedPreferences(filename, MODE_PRIVATE);
+                        Contact contact = new Contact();
+                        contact.setName(contactPrefs.getString("name", "pizza"));
+                        contact.setContactID(contactPrefs.getString("contactID", "pie"));
+                        contact.setDefaultPlatform(contactPrefs.getString("default", "toast"));
+                        contacts.add(contact);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        contacts.sort(new ContactSelectActivity.ContactComparator());
+        return contacts;
     }
 
     private ArrayList<Message> getData()
@@ -164,35 +195,6 @@ public class MessageSelectActivity extends AppCompatActivity {
         list.sort(new MessageComparator());
 
         return list;
-    }
-
-    // FIXME - Comment this out when no longer needed
-    private List<Contact> getData2()
-    {
-        List<Contact> contacts = new ArrayList<>();
-
-        String[] filenames = null;
-        try {
-            File sharedPrefsDir = new File(this.getApplicationInfo().dataDir,"shared_prefs");
-            if (sharedPrefsDir.exists() && sharedPrefsDir.isDirectory()) {
-                filenames = sharedPrefsDir.list();
-            }
-            if (filenames != null) {
-                for (String filename : filenames) {
-                    filename = filename.replace(".xml", "");
-                    if (filename.matches("[0-9]+")) {
-                        SharedPreferences contactPrefs = this.getSharedPreferences(filename, MODE_PRIVATE);
-                        Contact contact = new Contact();
-                        contact.setName(contactPrefs.getString("name", "pizza"));
-                        contact.setContactID(contactPrefs.getString("contactID", "pie"));
-                        contacts.add(contact);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return contacts;
     }
 
     static class MessageComparator implements Comparator<Message> {
