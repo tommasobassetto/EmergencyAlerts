@@ -39,11 +39,22 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.welcome);
+
+        Button skip = findViewById(R.id.button_skip);
+        skip.setOnClickListener(this.moveToMain);
     }
 
     public void moveToMain() {
         // use an intent to travel from one activity to another.
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
         startActivity(intent);
     }
+
+    private final View.OnClickListener moveToMain = new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+            Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+    };
 }
